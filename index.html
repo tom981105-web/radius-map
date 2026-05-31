@@ -44,10 +44,12 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .dong-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;gap:4px}
 .dong-title span{font-size:9px;color:var(--mu);font-weight:600}
 .dong-list{display:flex;flex-direction:column;gap:4px}
+.dong-group{margin-top:7px;padding:5px 7px 3px;border-top:1px solid rgba(255,255,255,.09);color:#f59e0b;font-size:10px;font-weight:900;letter-spacing:.2px}
+.dong-sub{display:flex;flex-direction:column;gap:4px}
 .dong-opt{width:100%;padding:6px 8px;border:1px solid var(--bd);border-radius:9px;background:rgba(255,255,255,.04);color:#cbd5e1;font-size:11px;font-weight:700;text-align:left;cursor:pointer;transition:all .15s;white-space:nowrap}
 .dong-opt.on{background:var(--g);border-color:var(--g);color:#fff;box-shadow:0 0 0 2px rgba(3,199,90,.18)}
 .dong-opt.all{color:#f59e0b}.dong-opt.all.on{color:#fff}
-@media(max-width:720px){.dong-filter{width:118px;max-height:48%;padding:8px}.dong-opt{font-size:10px;padding:5px 7px}.dong-title{font-size:10px}}
+@media(max-width:720px){.dong-filter{width:126px;max-height:48%;padding:8px}.dong-opt{font-size:10px;padding:5px 7px}.dong-title{font-size:10px}.dong-group{font-size:9px;padding:5px 6px 2px}}
 .btns{position:absolute;bottom:14px;right:10px;z-index:500;display:flex;flex-direction:column;gap:6px;align-items:center}
 #compass{width:40px;height:40px;pointer-events:none;flex-shrink:0}
 #compass svg{width:100%;height:100%;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
@@ -176,25 +178,45 @@ input[type=range]:disabled{opacity:.4}
     <div class="dong-title">🏘 동 선택 <span id="dongFilterNow">전체</span></div>
     <div class="dong-list">
       <button class="dong-opt all on" data-dong="전체" onclick="setDongFilter('전체')">전체</button>
-      <button class="dong-opt " data-dong="월계1동" onclick="setDongFilter('월계1동')">월계1동</button>
-      <button class="dong-opt " data-dong="월계2동" onclick="setDongFilter('월계2동')">월계2동</button>
-      <button class="dong-opt " data-dong="월계3동" onclick="setDongFilter('월계3동')">월계3동</button>
-      <button class="dong-opt " data-dong="공릉1동" onclick="setDongFilter('공릉1동')">공릉1동</button>
-      <button class="dong-opt " data-dong="공릉2동" onclick="setDongFilter('공릉2동')">공릉2동</button>
-      <button class="dong-opt " data-dong="하계1동" onclick="setDongFilter('하계1동')">하계1동</button>
-      <button class="dong-opt " data-dong="하계2동" onclick="setDongFilter('하계2동')">하계2동</button>
-      <button class="dong-opt " data-dong="중계본동" onclick="setDongFilter('중계본동')">중계본동</button>
-      <button class="dong-opt " data-dong="중계1동" onclick="setDongFilter('중계1동')">중계1동</button>
-      <button class="dong-opt " data-dong="중계2·3동" onclick="setDongFilter('중계2·3동')">중계2·3동</button>
-      <button class="dong-opt " data-dong="중계4동" onclick="setDongFilter('중계4동')">중계4동</button>
-      <button class="dong-opt " data-dong="상계1동" onclick="setDongFilter('상계1동')">상계1동</button>
-      <button class="dong-opt " data-dong="상계2동" onclick="setDongFilter('상계2동')">상계2동</button>
-      <button class="dong-opt " data-dong="상계3·4동" onclick="setDongFilter('상계3·4동')">상계3·4동</button>
-      <button class="dong-opt " data-dong="상계5동" onclick="setDongFilter('상계5동')">상계5동</button>
-      <button class="dong-opt " data-dong="상계6·7동" onclick="setDongFilter('상계6·7동')">상계6·7동</button>
-      <button class="dong-opt " data-dong="상계8동" onclick="setDongFilter('상계8동')">상계8동</button>
-      <button class="dong-opt " data-dong="상계9동" onclick="setDongFilter('상계9동')">상계9동</button>
-      <button class="dong-opt " data-dong="상계10동" onclick="setDongFilter('상계10동')">상계10동</button>
+
+      <div class="dong-group">월계동</div>
+      <div class="dong-sub">
+        <button class="dong-opt" data-dong="월계1동" onclick="setDongFilter('월계1동')">월계1동</button>
+        <button class="dong-opt" data-dong="월계2동" onclick="setDongFilter('월계2동')">월계2동</button>
+        <button class="dong-opt" data-dong="월계3동" onclick="setDongFilter('월계3동')">월계3동</button>
+      </div>
+
+      <div class="dong-group">공릉동</div>
+      <div class="dong-sub">
+        <button class="dong-opt" data-dong="공릉1동" onclick="setDongFilter('공릉1동')">공릉1동</button>
+        <button class="dong-opt" data-dong="공릉2동" onclick="setDongFilter('공릉2동')">공릉2동</button>
+      </div>
+
+      <div class="dong-group">하계동</div>
+      <div class="dong-sub">
+        <button class="dong-opt" data-dong="하계1동" onclick="setDongFilter('하계1동')">하계1동</button>
+        <button class="dong-opt" data-dong="하계2동" onclick="setDongFilter('하계2동')">하계2동</button>
+      </div>
+
+      <div class="dong-group">중계동</div>
+      <div class="dong-sub">
+        <button class="dong-opt" data-dong="중계본동" onclick="setDongFilter('중계본동')">중계본동</button>
+        <button class="dong-opt" data-dong="중계1동" onclick="setDongFilter('중계1동')">중계1동</button>
+        <button class="dong-opt" data-dong="중계2·3동" onclick="setDongFilter('중계2·3동')">중계2·3동</button>
+        <button class="dong-opt" data-dong="중계4동" onclick="setDongFilter('중계4동')">중계4동</button>
+      </div>
+
+      <div class="dong-group">상계동</div>
+      <div class="dong-sub">
+        <button class="dong-opt" data-dong="상계1동" onclick="setDongFilter('상계1동')">상계1동</button>
+        <button class="dong-opt" data-dong="상계2동" onclick="setDongFilter('상계2동')">상계2동</button>
+        <button class="dong-opt" data-dong="상계3·4동" onclick="setDongFilter('상계3·4동')">상계3·4동</button>
+        <button class="dong-opt" data-dong="상계5동" onclick="setDongFilter('상계5동')">상계5동</button>
+        <button class="dong-opt" data-dong="상계6·7동" onclick="setDongFilter('상계6·7동')">상계6·7동</button>
+        <button class="dong-opt" data-dong="상계8동" onclick="setDongFilter('상계8동')">상계8동</button>
+        <button class="dong-opt" data-dong="상계9동" onclick="setDongFilter('상계9동')">상계9동</button>
+        <button class="dong-opt" data-dong="상계10동" onclick="setDongFilter('상계10동')">상계10동</button>
+      </div>
     </div>
   </div>
   <div class="lock-badge" id="lockBadge">🔒 반경 고정됨</div>
@@ -271,7 +293,7 @@ let myDot=null,myAcc=null;
 let myLine=null,myLineLbl=null;
 let rM=500,watchId=null,isTracking=false,isLocked=false,lastHeading=0;
 let myLat=null,myLng=null;
-let dongPolygons=[],showDong=true;
+let dongPolygons=[],showDong=true,dongBounds={};
 const markers={pre:[],day:[]};
 const showing={pre:true,day:false};
 
@@ -289,11 +311,29 @@ function isMarkerVisible(m){
 function refreshMarkerVisibility(){
   ['pre','day'].forEach(type=>markers[type].forEach(m=>m.setMap(isMarkerVisible(m)?map:null)));
 }
+function getFeatureDong(props){
+  const txt=[props.adm_nm,props.ADM_NM,props.adm_cd2,props.SGG_NM,props.sigungu,props.SIG_KOR_NM].filter(Boolean).join(' ');
+  return NOWON_DONGS.find(d=>txt.includes(d))||'';
+}
+function refreshDongVisibility(){
+  dongPolygons.forEach(p=>{
+    const visible=showDong&&(selectedDong==='전체'||p._dong===selectedDong);
+    p.setMap(visible?map:null);
+  });
+}
+function fitToSelectedDong(){
+  if(selectedDong==='전체'||!dongBounds[selectedDong])return;
+  const b=dongBounds[selectedDong];
+  const bounds=new naver.maps.LatLngBounds(new naver.maps.LatLng(b.minLat,b.minLng),new naver.maps.LatLng(b.maxLat,b.maxLng));
+  map.fitBounds(bounds);
+}
 function setDongFilter(dong){
   selectedDong=dong;
   document.getElementById('dongFilterNow').textContent=dong;
   document.querySelectorAll('.dong-opt').forEach(b=>b.classList.toggle('on',b.dataset.dong===dong));
   refreshMarkerVisibility();
+  refreshDongVisibility();
+  fitToSelectedDong();
 }
 
 function calcDist(a,b){
@@ -1365,18 +1405,30 @@ async function drawDong(){
       return (p.SGG_NM&&p.SGG_NM.includes('노원구'))||(p.sigungu&&p.sigungu.includes('노원구'))||
              (p.adm_nm&&p.adm_nm.includes('노원구'))||(p.SIG_KOR_NM&&p.SIG_KOR_NM.includes('노원구'));
     }).forEach((f,i)=>{
+      const dong=getFeatureDong(f.properties||{});
       const color=DONG_COLORS[i%DONG_COLORS.length];
       const arr=f.geometry.type==='MultiPolygon'?f.geometry.coordinates.map(p=>p[0]):[f.geometry.coordinates[0]];
       arr.forEach(ca=>{
-        dongPolygons.push(new naver.maps.Polygon({
-          map,paths:[ca.map(c=>new naver.maps.LatLng(c[1],c[0]))],
+        const path=ca.map(c=>new naver.maps.LatLng(c[1],c[0]));
+        path.forEach(ll=>{
+          if(!dong)return;
+          if(!dongBounds[dong])dongBounds[dong]={minLat:ll.lat(),maxLat:ll.lat(),minLng:ll.lng(),maxLng:ll.lng()};
+          const b=dongBounds[dong];
+          b.minLat=Math.min(b.minLat,ll.lat());b.maxLat=Math.max(b.maxLat,ll.lat());
+          b.minLng=Math.min(b.minLng,ll.lng());b.maxLng=Math.max(b.maxLng,ll.lng());
+        });
+        const poly=new naver.maps.Polygon({
+          map:null,paths:[path],
           strokeColor:color,strokeWeight:2,strokeOpacity:.9,fillColor:color,fillOpacity:.12
-        }));
+        });
+        poly._dong=dong;
+        dongPolygons.push(poly);
       });
     });
+    refreshDongVisibility();
   }catch(e){console.error('행정동 로드 실패:',e);}
 }
-function toggleDong(){showDong=!showDong;dongPolygons.forEach(p=>p.setMap(showDong?map:null));document.getElementById('dongBtn').classList.toggle('on-purple',showDong);}
+function toggleDong(){showDong=!showDong;refreshDongVisibility();document.getElementById('dongBtn').classList.toggle('on-purple',showDong);}
 drawDong();
 
 function updateCompass(h){lastHeading=h;document.getElementById('needle').setAttribute('transform',`rotate(${h},20,20)`);}
