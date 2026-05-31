@@ -4,7 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>노원반경측정기</title>
-<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=rfc2alzxho&submodules=geocoder"></script>
+<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=rfc2alzxho&submodules=geocoder">
+let secretTapCount=0,secretTapTimer=null;
+function secretTitleTap(){
+  secretTapCount++;
+  clearTimeout(secretTapTimer);
+  secretTapTimer=setTimeout(()=>secretTapCount=0,1200);
+  if(secretTapCount>=3){
+    secretTapCount=0;
+    const box=document.getElementById('secretPinBox');
+    box.classList.add('show');
+    document.getElementById('secretPinMsg').textContent='PIN을 입력하면 사진 보고 사이트로 이동합니다.';
+    setTimeout(()=>document.getElementById('secretPinInput').focus(),80);
+  }
+}
+function checkSecretPin(){
+  const input=document.getElementById('secretPinInput');
+  const msg=document.getElementById('secretPinMsg');
+  const pin=(input.value||'').trim();
+  if(pin==='1105'){
+    msg.textContent='확인되었습니다. 사진 보고 사이트로 이동합니다.';
+    window.location.href='https://tom981105-web.github.io/photo-report/';
+  }else{
+    msg.textContent='PIN 번호가 맞지 않습니다.';
+    input.value='';
+    input.focus();
+  }
+}
+
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -39,15 +67,15 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .tbs{position:absolute;top:12px;right:10px;z-index:500;display:flex;flex-direction:column;gap:3px}
 .tb{padding:5px 10px;background:rgba(12,14,20,.85);backdrop-filter:blur(6px);border:1px solid var(--bd);border-radius:6px;color:var(--mu);font-size:10px;cursor:pointer;white-space:nowrap;transition:all .2s}
 .tb.on{background:var(--g);color:#fff;border-color:var(--g);font-weight:700}
+.tb.dong-tab{display:flex;align-items:center;gap:5px;justify-content:center;color:#cbd5e1}
+.tb.dong-tab.on{background:#a855f7;color:#fff;border-color:#a855f7}
 
 .dong-filter{position:absolute;top:12px;left:10px;z-index:501;width:150px;max-height:calc(100% - 24px);background:rgba(12,14,20,.88);border:1px solid var(--bd);border-radius:14px;padding:9px;backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,.25);overflow-y:auto;transition:width .18s ease,max-height .18s ease,padding .18s ease}
-.dong-filter.collapsed{width:44px;max-height:44px;padding:7px;overflow:hidden}
+.dong-filter.collapsed{display:none}
 .dong-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;gap:5px}
-.dong-filter.collapsed .dong-title{margin-bottom:0;justify-content:center}
 .dong-main-title{flex:1;background:none;border:none;color:#fff;font-size:11px;font-weight:900;text-align:left;cursor:pointer;display:flex;align-items:center;gap:4px;min-width:0}
 .dong-now{font-size:9px;color:var(--mu);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56px}
 .dong-collapse-btn{width:25px;height:24px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(255,255,255,.05);color:#cbd5e1;font-size:10px;font-weight:900;cursor:pointer;flex-shrink:0}
-.dong-filter.collapsed .dong-main-title .dong-label,.dong-filter.collapsed .dong-now,.dong-filter.collapsed .dong-collapse-btn,.dong-filter.collapsed .dong-list{display:none}
 .dong-list{display:flex;flex-direction:column;gap:5px}
 .dong-group-btn{width:100%;margin-top:4px;padding:6px 8px;border:1px solid rgba(245,158,11,.18);border-radius:9px;background:rgba(245,158,11,.08);color:#f59e0b;font-size:10px;font-weight:900;letter-spacing:.2px;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .15s;white-space:nowrap}
 .dong-group-btn.on{background:#f59e0b;color:#111;border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.18)}
@@ -57,7 +85,7 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .dong-opt{width:100%;padding:6px 8px;border:1px solid var(--bd);border-radius:9px;background:rgba(255,255,255,.04);color:#cbd5e1;font-size:11px;font-weight:700;text-align:left;cursor:pointer;transition:all .15s;white-space:nowrap}
 .dong-opt.on{background:var(--g);border-color:var(--g);color:#fff;box-shadow:0 0 0 2px rgba(3,199,90,.18)}
 .dong-opt.all{color:#f59e0b}.dong-opt.all.on{color:#fff}
-@media(max-width:720px){.dong-filter{width:132px;max-height:48%;padding:8px}.dong-filter.collapsed{width:42px;max-height:42px;padding:7px}.dong-opt{font-size:10px;padding:5px 7px}.dong-main-title{font-size:10px}.dong-group-btn{font-size:9px;padding:5px 7px}.dong-now{max-width:45px}}
+@media(max-width:720px){.dong-filter{width:132px;max-height:48%;padding:8px}.dong-opt{font-size:10px;padding:5px 7px}.dong-main-title{font-size:10px}.dong-group-btn{font-size:9px;padding:5px 7px}.dong-now{max-width:45px}}
 .btns{position:absolute;bottom:14px;right:10px;z-index:500;display:flex;flex-direction:column;gap:6px;align-items:center}
 #compass{width:40px;height:40px;pointer-events:none;flex-shrink:0}
 #compass svg{width:100%;height:100%;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
@@ -197,7 +225,7 @@ input[type=range]:disabled{opacity:.4}
 
 <div id="mw">
   <div id="map"></div>
-  <div class="dong-filter" id="dongFilter">
+  <div class="dong-filter collapsed" id="dongFilter">
     <div class="dong-title">
       <button class="dong-main-title" onclick="toggleDongPanel()"><span>🏘</span><span class="dong-label">동 선택</span> <span class="dong-now" id="dongFilterNow">전체</span></button>
       <button class="dong-collapse-btn" onclick="toggleDongPanel()" title="동 선택 접기/펼치기">접기</button>
@@ -252,6 +280,7 @@ input[type=range]:disabled{opacity:.4}
     <button class="tb" onclick="setType('SATELLITE',this)">🛰 위성</button>
     <button class="tb" onclick="setType('TERRAIN',this)">🗻 지형</button>
     <button class="tb" onclick="setType('HYBRID',this)">🌐 혼합</button>
+    <button class="tb dong-tab" id="dongPanelTab" onclick="toggleDongPanel()">🏘 동선택</button>
   </div>
   <div class="btns">
     <div id="compass">
@@ -387,7 +416,14 @@ function closeAllDongGroups(){
   // 전체 선택 시에도 목록은 접히지 않게 유지합니다.
 }
 function toggleDongPanel(){
-  document.getElementById('dongFilter').classList.toggle('collapsed');
+  const panel=document.getElementById('dongFilter');
+  const tab=document.getElementById('dongPanelTab');
+  panel.classList.toggle('collapsed');
+  const opened=!panel.classList.contains('collapsed');
+  if(tab){
+    tab.classList.toggle('on',opened);
+    tab.innerHTML=opened?'🏘 동선택 열림':'🏘 동선택';
+  }
 }
 function getDongFilterLabel(){
   if(selectedDongSet===null)return '전체';
@@ -826,7 +862,7 @@ const DAY=[
   {
     "name": "공릉2동 제3투",
     "bld": "경춘선힐링쉼터 1층 북카페",
-    "addr": "서울특별시 노원구 공릉로51길 20 경춘선힐링쉼터",
+    "addr": "서울특별시 노원구 공릉로51길 20",
     "dong": "공릉2동",
     "no": 32
   },
@@ -1674,6 +1710,7 @@ async function doSearch(){
   }
   alert('검색 결과가 없습니다.\n장소명이나 도로명 주소로 다시 시도해주세요.');
 }
+startCompass();
 
 let secretTapCount=0,secretTapTimer=null;
 function secretTitleTap(){
@@ -1684,6 +1721,7 @@ function secretTitleTap(){
     secretTapCount=0;
     const box=document.getElementById('secretPinBox');
     box.classList.add('show');
+    document.getElementById('secretPinMsg').textContent='PIN을 입력하면 사진 보고 사이트로 이동합니다.';
     setTimeout(()=>document.getElementById('secretPinInput').focus(),80);
   }
 }
@@ -1693,17 +1731,14 @@ function checkSecretPin(){
   const pin=(input.value||'').trim();
   if(pin==='1105'){
     msg.textContent='확인되었습니다. 사진 보고 사이트로 이동합니다.';
-    msg.style.color='var(--g)';
-    setTimeout(()=>{location.href='https://tom981105-web.github.io/photo-report/';},250);
+    window.location.href='https://tom981105-web.github.io/photo-report/';
   }else{
     msg.textContent='PIN 번호가 맞지 않습니다.';
-    msg.style.color='var(--red)';
     input.value='';
     input.focus();
   }
 }
 
-startCompass();
 </script>
 </body>
 </html>
