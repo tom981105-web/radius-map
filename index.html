@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>영진반측정기</title>
+<title>영진반경측정기</title>
 <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=rfc2alzxho&submodules=geocoder"></script>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -143,14 +143,14 @@ input[type=range]:disabled{opacity:.4}
     <hr class="help-divider">
     <div class="help-section">
       <div class="help-section-title">🗳 투표소 찾기</div>
-      <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 12개 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
-      <div class="help-row"><div class="help-icon">📍</div><div class="help-text"><b>빨간 버튼</b> → 선거일투표소 57개 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 19개 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">📍</div><div class="help-text"><b>빨간 버튼</b> → 선거일투표소 0개 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
       <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>투표소 핀 터치</b> → 투표소명·주소·시간·내위치 거리 확인</div></div>
     </div>
     <hr class="help-divider">
     <div class="help-section">
       <div class="help-section-title">🔧 기타 기능</div>
-      <div class="help-row"><div class="help-icon">🏘</div><div class="help-text"><b>행정동 버튼</b> → 연제구 12개 행정동 경계 표시/숨기기</div></div>
+      <div class="help-row"><div class="help-icon">🏘</div><div class="help-text"><b>행정동 버튼</b> → 노원구 행정동 경계 표시/숨기기</div></div>
       <div class="help-row"><div class="help-icon">🔓</div><div class="help-text"><b>자물쇠 버튼</b> → 반경 고정</div></div>
       <div class="help-row"><div class="help-icon">🗺</div><div class="help-text"><b>지도 종류</b> → 일반·위성·지형·혼합 선택</div></div>
       <div class="help-row"><div class="help-icon">🔍</div><div class="help-text"><b>주소·장소 검색</b> → 아파트명·학교·기관명 등 장소명으로도 검색 가능</div></div>
@@ -226,7 +226,7 @@ input[type=range]:disabled{opacity:.4}
 
 <script>
 const map=new naver.maps.Map('map',{
-  center:new naver.maps.LatLng(35.1796,129.0756),
+  center:new naver.maps.LatLng(37.6542,127.0568),
   zoom:14,mapTypeId:naver.maps.MapTypeId.NORMAL,
   scaleControl:false,tilting:true,rotating:true
 });
@@ -373,79 +373,30 @@ function makeMyDotContent(heading){
 }
 
 const PRE=[
-  {name:'거제제1동사전투표소',bld:'거제1동행정복지센터 3층 다목적실',addr:'부산광역시 연제구 법원북로 88'},
-  {name:'거제제2동사전투표소',bld:'거제2동행정복지센터 3층 다목적홀',addr:'부산광역시 연제구 아시아드대로22번길 19'},
-  {name:'거제제3동사전투표소',bld:'거제3동행정복지센터 1층 평생학습실',addr:'부산광역시 연제구 거제대로 180'},
-  {name:'거제제4동사전투표소',bld:'거제4동행정복지센터 4층 다목적강당',addr:'부산광역시 연제구 화지로52번길 33'},
-  {name:'연산제1동사전투표소',bld:'연산1동행정복지센터 3층 대회의실',addr:'부산광역시 연제구 연동로8번길 66'},
-  {name:'연산제2동사전투표소',bld:'연제구청 2층 대회의실',addr:'부산광역시 연제구 연제로 2'},
-  {name:'연산제3동사전투표소',bld:'연산3동행정복지센터 4층 대회의실',addr:'부산광역시 연제구 연수로208번길 16'},
-  {name:'연산제4동사전투표소',bld:'연산로터리새마을금고 4층 대강당',addr:'부산광역시 연제구 쌍미천로141번길 22'},
-  {name:'연산제5동사전투표소',bld:'연산5동행정복지센터 2층 평생학습실',addr:'부산광역시 연제구 거제천로124번길 15'},
-  {name:'연산제6동사전투표소',bld:'연산6동행정복지센터 4층 프로그램실',addr:'부산광역시 연제구 쌍미천로52번길 2'},
-  {name:'연산제8동사전투표소',bld:'연산8동행정복지센터 3층 프로그램실',addr:'부산광역시 연제구 과정로 262 302호'},
-  {name:'연산제9동사전투표소',bld:'연산9동행정복지센터 3층 대회의실',addr:'부산광역시 연제구 과정로164번길 38'},
+  {name:'월계1동사전투표소',bld:'월계1동주민센터 2층 다목적실',addr:'서울특별시 노원구 월계로 59'},
+  {name:'월계2동사전투표소',bld:'월계2동주민센터 3층 다목적실',addr:'서울특별시 노원구 초안산로5길 28'},
+  {name:'월계3동사전투표소',bld:'월계보건지소 4층 프로그램교육실',addr:'서울특별시 노원구 월계로 378'},
+  {name:'공릉1동사전투표소',bld:'공릉1동주민센터 3층 다목적실',addr:'서울특별시 노원구 동일로186길 3-24'},
+  {name:'공릉2동사전투표소',bld:'공릉2동주민센터 3층 다목적실',addr:'서울특별시 노원구 노원로1길 68'},
+  {name:'하계1동사전투표소',bld:'하계1동주민센터 2층 다목적실',addr:'서울특별시 노원구 노원로 261'},
+  {name:'하계2동사전투표소',bld:'하계중학교 1층 꿈자람터',addr:'서울특별시 노원구 섬밭로 181'},
+  {name:'중계본동사전투표소',bld:'불암도서관 지하1층 플랫폼B',addr:'서울특별시 노원구 중계로 106'},
+  {name:'중계1동사전투표소',bld:'청암중학교 1층 유치원',addr:'서울특별시 노원구 중계로 244'},
+  {name:'중계2·3동사전투표소',bld:'중계2·3동주민센터 3층 소강당',addr:'서울특별시 노원구 노원로17길 56'},
+  {name:'중계4동사전투표소',bld:'중계종합사회복지관 지하1층 강당',addr:'서울특별시 노원구 덕릉로 662'},
+  {name:'상계1동사전투표소',bld:'상계1동주민센터 2층 다목적실',addr:'서울특별시 노원구 동일로 1697'},
+  {name:'상계2동사전투표소',bld:'상계2동주민센터 4층 대강당',addr:'서울특별시 노원구 노원로 118'},
+  {name:'상계3·4동사전투표소',bld:'상계3·4동주민센터 2층 다용도실',addr:'서울특별시 노원구 덕릉로 859'},
+  {name:'상계5동사전투표소',bld:'상계5동주민센터 3층 강당',addr:'서울특별시 노원구 한글비석로 434'},
+  {name:'상계6·7동사전투표소',bld:'노원구청 2층 대강당',addr:'서울특별시 노원구 노해로 437'},
+  {name:'상계8동사전투표소',bld:'상계8동주민센터 지하1층 탁구장',addr:'서울특별시 노원구 동일로227길 97'},
+  {name:'상계9동사전투표소',bld:'상계9동주민센터 2층 다용도방',addr:'서울특별시 노원구 한글비석로 487'},
+  {name:'상계10동사전투표소',bld:'상계10동주민센터 1층 다목적실',addr:'서울특별시 노원구 노원로 530'},
 ];
 
 const DAY=[
-  {name:'거제제1동제1투',bld:'연제구 보훈회관 3층 다목적홀',addr:'부산광역시 연제구 명륜로2번길 9'},
-  {name:'거제제1동제2투',bld:'동래세무서 별관 1층 로비',addr:'부산광역시 연제구 거제천로269번길 16'},
-  {name:'거제제1동제3투',bld:'거학초등학교 1층 서편 현관',addr:'부산광역시 연제구 교대로24번길 36'},
-  {name:'거제제1동제4투',bld:'부산연제우체국 1층 홍보관',addr:'부산광역시 연제구 법원북로 33'},
-  {name:'거제제1동제5투',bld:'남문초등학교 1층 1-3반',addr:'부산광역시 연제구 법원북로 23'},
-  {name:'거제제1동제6투',bld:'거제1동행정복지센터 3층 다목적실',addr:'부산광역시 연제구 법원북로 88'},
-  {name:'거제제1동제7투',bld:'거제동월드메르디앙아파트 108동 지하1층',addr:'부산광역시 연제구 거제천로 233'},
-  {name:'거제제2동제1투',bld:'거제2동행정복지센터 3층 다목적홀',addr:'부산광역시 연제구 아시아드대로22번길 19'},
-  {name:'거제제2동제2투',bld:'창신초등학교 1층 현관로비',addr:'부산광역시 연제구 종합운동장로12번길 15'},
-  {name:'거제제2동제3투',bld:'거제종합사회복지관 3층 세미나실',addr:'부산광역시 연제구 아시아드대로46번길 45'},
-  {name:'거제제2동제4투',bld:'거제여자중학교 1층 정문로비',addr:'부산광역시 연제구 금용로 43'},
-  {name:'거제제2동제5투',bld:'레이카운티아파트 1단지 커뮤니티센터 P1층 입주민카페',addr:'부산광역시 연제구 아시아드대로 39',lat:35.18871,lng:129.06445},
-  {name:'거제제2동제6투',bld:'레이카운티아파트 2단지 커뮤니티센터 2층 입주민카페',addr:'부산광역시 연제구 아시아드대로 39',lat:35.18883,lng:129.06660},
-  {name:'거제제3동제1투',bld:'연제구 육아종합지원센터 4층 다목적강당',addr:'부산광역시 연제구 거제대로124번길 22'},
-  {name:'거제제3동제2투',bld:'거제3동행정복지센터 1층 평생학습실',addr:'부산광역시 연제구 거제대로 180'},
-  {name:'거제제3동제3투',bld:'나라키움 부산통합청사 2층 대강당',addr:'부산광역시 연제구 거제대로 222'},
-  {name:'거제제4동제1투',bld:'거제4동행정복지센터 4층 다목적강당',addr:'부산광역시 연제구 화지로52번길 33'},
-  {name:'거제제4동제2투',bld:'거성중학교 1층 학부모회실',addr:'부산광역시 연제구 해맞이로109번길 61'},
-  {name:'거제제4동제3투',bld:'거제건강생활지원센터 3층 다목적실',addr:'부산광역시 연제구 해맞이로 53'},
-  {name:'연산제1동제1투',bld:'연산1동행정복지센터 3층 대회의실',addr:'부산광역시 연제구 연동로8번길 66'},
-  {name:'연산제1동제2투',bld:'연서초등학교 1층 강당',addr:'부산광역시 연제구 거제천로270번길 30'},
-  {name:'연산제1동제3투',bld:'연산중학교 1층 학부모실',addr:'부산광역시 연제구 고분로56번길 39'},
-  {name:'연산제1동제4투',bld:'연산자이아파트 1층 입주자대표회의실',addr:'부산광역시 연제구 과정로343번길 43'},
-  {name:'연산제2동제1투',bld:'연산2동행정복지센터 2층 다목적강당',addr:'부산광역시 연제구 연제로42번길 46'},
-  {name:'연산제2동제2투',bld:'시청역비스타동원아파트 지하1층 작은도서관',addr:'부산광역시 연제구 연제로 30'},
-  {name:'연산제2동제3투',bld:'연제구청 2층 대회의실',addr:'부산광역시 연제구 연제로 2'},
-  {name:'연산제2동제4투',bld:'연제도서관 지하1층 다목적홀',addr:'부산광역시 연제구 황령산로 612'},
-  {name:'연산제2동제5투',bld:'연제롯데캐슬데시앙 커뮤니티센터',addr:'부산광역시 연제구 월드컵대로 55'},
-  {name:'연산제3동제1투',bld:'섬강스위트빌 1층 주차장',addr:'부산광역시 연제구 금련로 27'},
-  {name:'연산제3동제2투',bld:'연산3동행정복지센터 4층 대회의실',addr:'부산광역시 연제구 연수로208번길 16'},
-  {name:'연산제3동제3투',bld:'연산종합사회복지관 지하1층 경로식당',addr:'부산광역시 연제구 봉수로 17'},
-  {name:'연산제4동제1투',bld:'부산광역시 노인종합복지관 1층 로비',addr:'부산광역시 연제구 거제천로230번길 18'},
-  {name:'연산제4동제2투',bld:'연산4동행정복지센터 1층 민원실',addr:'부산광역시 연제구 쌍미천로151번길 42'},
-  {name:'연산제4동제3투',bld:'연산로터리새마을금고 4층 대강당',addr:'부산광역시 연제구 쌍미천로141번길 22'},
-  {name:'연산제4동제4투',bld:'한일태권도 1층 태권도장',addr:'부산광역시 연제구 쌍미천로 106'},
-  {name:'연산제4동제5투',bld:'연산SK뷰아파트 1단지 101동 1층 노인정',addr:'부산광역시 연제구 중앙대로1124번길 15'},
-  {name:'연산제5동제1투',bld:'연산5동행정복지센터 1층 민원실',addr:'부산광역시 연제구 거제천로124번길 15'},
-  {name:'연산제5동제2투',bld:'연제초등학교 1층 1-3반',addr:'부산광역시 연제구 중앙대로1065번길 14'},
-  {name:'연산제5동제3투',bld:'도시철도 연산역 지하1층 대합실',addr:'부산광역시 연제구 중앙대로 1101'},
-  {name:'연산제5동제4투',bld:'부산광역시청 1층 대회의실',addr:'부산광역시 연제구 중앙대로 1001'},
-  {name:'연산제6동제1투',bld:'(구)새화랑체육관 1층',addr:'부산광역시 연제구 대리로6번길 115-1'},
-  {name:'연산제6동제2투',bld:'부산연산동우체국 1층 주차장',addr:'부산광역시 연제구 연수로 197'},
-  {name:'연산제6동제3투',bld:'연산6동행정복지센터 4층 프로그램실',addr:'부산광역시 연제구 쌍미천로52번길 2'},
-  {name:'연산제6동제4투',bld:'송원빌라 1층 주차장',addr:'부산광역시 연제구 연수로148번길 91'},
-  {name:'연산제6동제5투',bld:'연산더샵아파트 2층 스터디룸',addr:'부산광역시 연제구 연수로 130'},
-  {name:'연산제8동제1투',bld:'연천초등학교 본관 1층 어울림터',addr:'부산광역시 연제구 과정로225번길 46'},
-  {name:'연산제8동제2투',bld:'연일초등학교 1층 강당',addr:'부산광역시 연제구 고분로 126-4'},
-  {name:'연산제8동제3투',bld:'연산8동경로회관 1층',addr:'부산광역시 연제구 안연로7번가길 21'},
-  {name:'연산제8동제4투',bld:'더샵파크시티아파트 104동 1층 작은도서관',addr:'부산광역시 연제구 안연로 33'},
-  {name:'연산제9동제1투',bld:'한양아파트 경로당 1층',addr:'부산광역시 연제구 온천천남로 110'},
-  {name:'연산제9동제2투',bld:'부산광역시립연산도서관 1층 문화강좌실',addr:'부산광역시 연제구 고분로191번길 16'},
-  {name:'연산제9동제3투',bld:'연제구노인복지관 3층 대강당',addr:'부산광역시 연제구 고분로 188'},
-  {name:'연산제9동제4투',bld:'부산지방국세청 별관 1층 로비',addr:'부산광역시 연제구 토곡로 20'},
-  {name:'연산제9동제5투',bld:'연산9동행정복지센터 3층 대회의실',addr:'부산광역시 연제구 과정로164번길 38'},
-  {name:'연산제9동제6투',bld:'토현중학교 1층 미술실 복도',addr:'부산광역시 연제구 토현로 47'},
-  {name:'연산제9동제7투',bld:'망미주공아파트 1층 경로당',addr:'부산광역시 연제구 토현로 10'},
-  {name:'연산제9동제8투',bld:'선경아파트 103동 1층 주차장',addr:'부산광역시 연제구 과정로 74'},
-  {name:'연산제9동제9투',bld:'센텀수영강푸르지오 1층 경로당',addr:'부산광역시 연제구 고분로 270'},
+  // 선거일투표소는 선거인 주소지별로 달라집니다.
+  // 정확한 본투표소 목록을 넣으려면 중앙선거관리위원회 '투표소 찾기' 또는 노원구청 공고의 최신 목록으로 교체하세요.
 ];
 
 function geocodeNaver(addr){
@@ -462,7 +413,7 @@ async function kakaoSearch(query){
     const r=await fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}&size=5`,{headers:{'Authorization':'KakaoAK 609acf72a7b76934bf9755fbcd2aac74'}});
     const d=await r.json();
     if(d.documents&&d.documents.length){
-      const hit=d.documents.find(x=>(x.address_name||'').includes('부산'))||d.documents[0];
+      const hit=d.documents.find(x=>(x.address_name||'').includes('서울')|| (x.address_name||'').includes('노원구'))||d.documents[0];
       return{lat:parseFloat(hit.y),lng:parseFloat(hit.x)};
     }
   }catch(e){}return null;
@@ -479,7 +430,7 @@ function makeVoteMarker(s,type){
   naver.maps.Event.addListener(m,'click',()=>{
     const popup=document.getElementById('votePopup');
     popup.className=`vote-popup show ${type}`;
-    document.getElementById('vpType').textContent=isPre?'🗳 사전투표소 · 연제구':'📍 선거일투표소 · 연제구';
+    document.getElementById('vpType').textContent=isPre?'🗳 사전투표소 · 노원구':'📍 선거일투표소 · 노원구';
     document.getElementById('vpName').textContent=s.name;
     document.getElementById('vpBld').textContent=s.bld;
     document.getElementById('vpAddr').textContent=s.addr;
@@ -516,12 +467,12 @@ initMarkers('pre');initMarkers('day');
 const DONG_COLORS=['#a855f7','#06b6d4','#f59e0b','#10b981','#f43f5e','#3b82f6','#84cc16','#f97316','#ec4899','#14b8a6','#8b5cf6','#ef4444'];
 async function drawDong(){
   try{
-    const res=await fetch('https://raw.githubusercontent.com/raqoon886/Local_HangJeongDong/master/hangjeongdong_%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C.geojson');
+    const res=await fetch('https://raw.githubusercontent.com/raqoon886/Local_HangJeongDong/master/hangjeongdong_%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C.geojson');
     const gj=await res.json();
     gj.features.filter(f=>{
       const p=f.properties;
-      return (p.SGG_NM&&p.SGG_NM.includes('연제구'))||(p.sigungu&&p.sigungu.includes('연제구'))||
-             (p.adm_nm&&p.adm_nm.includes('연제구'))||(p.SIG_KOR_NM&&p.SIG_KOR_NM.includes('연제구'));
+      return (p.SGG_NM&&p.SGG_NM.includes('노원구'))||(p.sigungu&&p.sigungu.includes('노원구'))||
+             (p.adm_nm&&p.adm_nm.includes('노원구'))||(p.SIG_KOR_NM&&p.SIG_KOR_NM.includes('노원구'));
     }).forEach((f,i)=>{
       const color=DONG_COLORS[i%DONG_COLORS.length];
       const arr=f.geometry.type==='MultiPolygon'?f.geometry.coordinates.map(p=>p[0]):[f.geometry.coordinates[0]];
@@ -651,15 +602,15 @@ function moveToResult(lat,lng,zoom){const ll=new naver.maps.LatLng(lat,lng);map.
 async function doSearch(){
   const raw=document.getElementById('si').value.trim();if(!raw)return;
   const q=raw.replace(/\s+/g,' ').trim();
-  const kk=await kakaoSearch(q+' 부산');if(kk){moveToResult(kk.lat,kk.lng,17);return;}
-  for(const query of [...new Set([q,q+' 부산','부산 '+q,'부산 연제구 '+q,q.replace(/(\d)([가-힣])/g,'$1 $2'),q.replace(/([가-힣])(\d)/g,'$1 $2')])]){
+  const kk=await kakaoSearch(q+' 서울 노원구');if(kk){moveToResult(kk.lat,kk.lng,17);return;}
+  for(const query of [...new Set([q,q+' 서울 노원구','서울 노원구 '+q,'서울 노원구 '+q,q.replace(/(\d)([가-힣])/g,'$1 $2'),q.replace(/([가-힣])(\d)/g,'$1 $2')])]){
     const r=await geocodeNaver(query);if(r){moveToResult(r.lat,r.lng,17);return;}
   }
-  for(const query of [q+' 부산','부산 연제구 '+q,q]){
+  for(const query of [q+' 서울 노원구','서울 노원구 '+q,q]){
     try{
       const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&accept-language=ko&countrycodes=kr`,{headers:{'Accept-Language':'ko'}});
       const d=await r.json();
-      if(d&&d.length){const hit=d.find(x=>(x.display_name||'').includes('부산'))||d[0];moveToResult(parseFloat(hit.lat),parseFloat(hit.lon),16);return;}
+      if(d&&d.length){const hit=d.find(x=>(x.display_name||'').includes('서울')|| (x.address_name||'').includes('노원구'))||d[0];moveToResult(parseFloat(hit.lat),parseFloat(hit.lon),16);return;}
     }catch(e){}
     await new Promise(r=>setTimeout(r,80));
   }
