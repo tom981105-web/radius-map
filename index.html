@@ -52,10 +52,8 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .dong-group-btn{width:100%;margin-top:4px;padding:6px 8px;border:1px solid rgba(245,158,11,.18);border-radius:9px;background:rgba(245,158,11,.08);color:#f59e0b;font-size:10px;font-weight:900;letter-spacing:.2px;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .15s;white-space:nowrap}
 .dong-group-btn.on{background:#f59e0b;color:#111;border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.18)}
 .dong-group-btn.partial{border-color:#f59e0b;background:rgba(245,158,11,.16);color:#ffd166}
-.dong-group-btn .arr{font-size:9px;opacity:.85;transition:transform .15s}
-.dong-group-btn.open .arr{transform:rotate(180deg)}
-.dong-sub{display:none;flex-direction:column;gap:4px;margin:4px 0 3px 7px;padding-left:6px;border-left:1px solid rgba(255,255,255,.10)}
-.dong-sub.open{display:flex}
+.dong-group-btn .arr{display:none}
+.dong-sub{display:flex;flex-direction:column;gap:4px;margin:4px 0 3px 7px;padding-left:6px;border-left:1px solid rgba(255,255,255,.10)}
 .dong-opt{width:100%;padding:6px 8px;border:1px solid var(--bd);border-radius:9px;background:rgba(255,255,255,.04);color:#cbd5e1;font-size:11px;font-weight:700;text-align:left;cursor:pointer;transition:all .15s;white-space:nowrap}
 .dong-opt.on{background:var(--g);border-color:var(--g);color:#fff;box-shadow:0 0 0 2px rgba(3,199,90,.18)}
 .dong-opt.all{color:#f59e0b}.dong-opt.all.on{color:#fff}
@@ -166,7 +164,7 @@ input[type=range]:disabled{opacity:.4}
     <div class="help-section">
       <div class="help-section-title">🗳 투표소 찾기</div>
       <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 19곳 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
-      <div class="help-row"><div class="help-icon">🏫</div><div class="help-text"><b>빨간 버튼</b> → 본투표소 118곳 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">📍</div><div class="help-text"><b>빨간 버튼</b> → 본투표소 118곳 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
       <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>투표소 핀 터치</b> → 투표소명·장소·주소·시간·내위치 거리 확인</div></div>
     </div>
     <hr class="help-divider">
@@ -260,7 +258,7 @@ input[type=range]:disabled{opacity:.4}
     </div>
     <button class="ib on-purple" id="dongBtn" onclick="toggleDong()">🏘</button>
     <button class="ib" id="preBtn" onclick="toggleMarkers('pre')">🗳</button>
-    <button class="ib on-orange" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">🏫</button>
+    <button class="ib on-orange" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">📍</button>
     <button class="ib" id="lockBtn" onclick="toggleLock()">🔓</button>
     <button class="ib" id="trackBtn" onclick="toggleTracking()">◎</button>
     <button class="ib" onclick="locateOnce()">⊕</button>
@@ -368,12 +366,10 @@ function fitToSelectedDong(){
   map.fitBounds(bounds);
 }
 function openDongGroup(group,open=true){
-  document.querySelectorAll(`.dong-sub[data-group="${group}"]`).forEach(el=>el.classList.toggle('open',open));
-  document.querySelectorAll(`.dong-group-btn[data-group="${group}"]`).forEach(el=>el.classList.toggle('open',open));
+  // 대분류/소분류 목록은 항상 펼쳐진 형태로 유지합니다.
 }
 function closeAllDongGroups(){
-  document.querySelectorAll('.dong-sub').forEach(el=>el.classList.remove('open'));
-  document.querySelectorAll('.dong-group-btn').forEach(el=>el.classList.remove('open'));
+  // 전체 선택 시에도 목록은 접히지 않게 유지합니다.
 }
 function toggleDongPanel(){
   document.getElementById('dongFilter').classList.toggle('collapsed');
@@ -427,8 +423,7 @@ function selectDongGroup(group){
   if(currentlyAll)dongs.forEach(d=>selectedDongSet.delete(d));
   else dongs.forEach(d=>selectedDongSet.add(d));
   normalizeSelection();
-  // 대분류를 누르면 해당 묶음을 선택/해제한 뒤 자동으로 접어서 화면을 덜 가리게 함
-  openDongGroup(group,false);
+  openDongGroup(group,true);
   applyDongFilter();
 }
 function selectSubDong(dong){
@@ -437,12 +432,7 @@ function selectSubDong(dong){
   if(selectedDongSet.has(dong))selectedDongSet.delete(dong);
   else selectedDongSet.add(dong);
   normalizeSelection();
-  // 소분류를 하나씩 골랐을 때 해당 대분류가 모두 선택되거나 전부 해제되면 자동 접기
-  if(group){
-    const dongs=DONG_GROUPS[group]||[];
-    const selectedCount=selectedDongSet===null?0:dongs.filter(d=>selectedDongSet.has(d)).length;
-    openDongGroup(group,selectedCount>0&&selectedCount<dongs.length);
-  }
+  if(group)openDongGroup(group,true);
   applyDongFilter();
 }
 
@@ -1451,7 +1441,7 @@ async function kakaoSearch(query){
 function makeVoteMarker(s,type){
   const isPre=type==='pre';
   const color=isPre?'#2563eb':'#ff4757';
-  const icon=isPre?'🗳':'🏫';
+  const icon=isPre?'🗳':'📍';
   const m=new naver.maps.Marker({
     position:new naver.maps.LatLng(s.lat,s.lng),map,
     icon:{content:`<div style="background:${color};color:#fff;border:1px solid #fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:8px;box-shadow:0 1px 5px rgba(0,0,0,.5);transform:translate(-7px,-7px);cursor:pointer;">${icon}</div>`,anchor:new naver.maps.Point(0,0)},
@@ -1462,7 +1452,7 @@ function makeVoteMarker(s,type){
   naver.maps.Event.addListener(m,'click',()=>{
     const popup=document.getElementById('votePopup');
     popup.className=`vote-popup show ${type}`;
-    document.getElementById('vpType').textContent=isPre?`🗳 사전투표소 · ${getStationDong(s)}`:`🏫 본투표소 · ${getStationDong(s)}`;
+    document.getElementById('vpType').textContent=isPre?`🗳 사전투표소 · ${getStationDong(s)}`:`📍 본투표소 · ${getStationDong(s)}`;
     document.getElementById('vpName').textContent=s.name;
     document.getElementById('vpBld').textContent=s.bld;
     document.getElementById('vpAddr').textContent=s.addr;
