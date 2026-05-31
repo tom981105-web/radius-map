@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>영진반경측정기</title>
-<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=rfc2alzxho&submodules=geocoder"></script>
+<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=1zqd3bjv3u&submodules=geocoder"></script>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -48,12 +48,13 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .ib.on-purple{background:#a855f7;color:#fff;border-color:#a855f7}
 .ib.on-blue{background:#2563eb;color:#fff;border-color:#2563eb}
 .ib.on-red{background:#ff4757;color:#fff;border-color:#ff4757}
+.ib.on-orange{background:#f59e0b;color:#111;border-color:#f59e0b;font-weight:700}
 .vote-popup{position:absolute;bottom:14px;left:10px;z-index:600;background:rgba(15,17,23,0.95);border-radius:12px;padding:10px 14px;max-width:240px;display:none;backdrop-filter:blur(10px)}
 .vote-popup.show{display:block}
 .vote-popup.pre{border:1px solid #2563eb}
-.vote-popup.day{border:1px solid #ff4757}
+.vote-popup.day{border:1px solid #f59e0b}
 .vp-type{font-size:9px;font-weight:700;letter-spacing:1px;margin-bottom:4px}
-.pre .vp-type{color:#2563eb}.day .vp-type{color:#ff4757}
+.pre .vp-type{color:#2563eb}.day .vp-type{color:#f59e0b}
 .vp-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
 .vp-bld{font-size:10px;color:#a0aec0;margin-bottom:2px}
 .vp-addr{font-size:10px;color:var(--mu);line-height:1.5}
@@ -143,9 +144,9 @@ input[type=range]:disabled{opacity:.4}
     <hr class="help-divider">
     <div class="help-section">
       <div class="help-section-title">🗳 투표소 찾기</div>
-      <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 19개 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
-      <div class="help-row"><div class="help-icon">📍</div><div class="help-text"><b>빨간 버튼</b> → 선거일투표소 0개 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
-      <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>투표소 핀 터치</b> → 투표소명·주소·시간·내위치 거리 확인</div></div>
+      <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 19곳 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">🏫</div><div class="help-text"><b>주황 버튼</b> → 본투표소 0개 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>투표소 핀 터치</b> → 투표소명·장소·주소·시간·내위치 거리 확인</div></div>
     </div>
     <hr class="help-divider">
     <div class="help-section">
@@ -190,7 +191,7 @@ input[type=range]:disabled{opacity:.4}
     </div>
     <button class="ib on-purple" id="dongBtn" onclick="toggleDong()">🏘</button>
     <button class="ib on-blue" id="preBtn" onclick="toggleMarkers('pre')">🗳</button>
-    <button class="ib on-red" id="dayBtn" onclick="toggleMarkers('day')">📍</button>
+    <button class="ib" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">🏫</button>
     <button class="ib" id="lockBtn" onclick="toggleLock()">🔓</button>
     <button class="ib" id="trackBtn" onclick="toggleTracking()">◎</button>
     <button class="ib" onclick="locateOnce()">⊕</button>
@@ -238,7 +239,7 @@ let rM=500,watchId=null,isTracking=false,isLocked=false,lastHeading=0;
 let myLat=null,myLng=null;
 let dongPolygons=[],showDong=true;
 const markers={pre:[],day:[]};
-const showing={pre:true,day:true};
+const showing={pre:true,day:false};
 
 function calcDist(a,b){
   const R=6371000,r=x=>x*Math.PI/180;
@@ -395,8 +396,832 @@ const PRE=[
 ];
 
 const DAY=[
-  // 선거일투표소는 선거인 주소지별로 달라집니다.
-  // 정확한 본투표소 목록을 넣으려면 중앙선거관리위원회 '투표소 찾기' 또는 노원구청 공고의 최신 목록으로 교체하세요.
+  {
+    "name": "월계1동 제1투",
+    "bld": "월계1동주민센터 2층 다목적방",
+    "addr": "서울특별시 노원구 석계로 59",
+    "dong": "월계1동",
+    "no": 1
+  },
+  {
+    "name": "월계1동 제2투",
+    "bld": "현대아파트 관리동 1층 경로당",
+    "addr": "서울특별시 노원구 석계로 49",
+    "dong": "월계1동",
+    "no": 2
+  },
+  {
+    "name": "월계1동 제3투",
+    "bld": "선곡초등학교 본관 2층 늘봄2실",
+    "addr": "서울특별시 노원구 광운로2길 1",
+    "dong": "월계1동",
+    "no": 3
+  },
+  {
+    "name": "월계1동 제4투",
+    "bld": "인덕창업팩토리 1층 강당",
+    "addr": "서울특별시 노원구 석계로 91",
+    "dong": "월계1동",
+    "no": 4
+  },
+  {
+    "name": "월계1동 제5투",
+    "bld": "광운인공지능고등학교 근면관 1층 현관",
+    "addr": "서울특별시 노원구 광운로1길 24",
+    "dong": "월계1동",
+    "no": 5
+  },
+  {
+    "name": "월계2동 제1투",
+    "bld": "월계2동주민센터 3층 다목적방",
+    "addr": "서울특별시 노원구 초안산로5길 28",
+    "dong": "월계2동",
+    "no": 6
+  },
+  {
+    "name": "월계2동 제2투",
+    "bld": "월계중학교 1층 기술실",
+    "addr": "서울특별시 노원구 월계로45가길 54",
+    "dong": "월계2동",
+    "no": 7
+  },
+  {
+    "name": "월계2동 제3투",
+    "bld": "월계초등학교 2층 체육관",
+    "addr": "서울특별시 노원구 월계로45가길 10",
+    "dong": "월계2동",
+    "no": 8
+  },
+  {
+    "name": "월계2동 제4투",
+    "bld": "신창중학교 1층 도서관",
+    "addr": "서울특별시 노원구 월계로45길 92",
+    "dong": "월계2동",
+    "no": 9
+  },
+  {
+    "name": "월계2동 제5투",
+    "bld": "월계종합사회복지관 1층 식당",
+    "addr": "서울특별시 노원구 초안산로1길 51",
+    "dong": "월계2동",
+    "no": 10
+  },
+  {
+    "name": "월계2동 제6투",
+    "bld": "인덕대학교 덕관 2층 211호",
+    "addr": "서울특별시 노원구 초안산로 12",
+    "dong": "월계2동",
+    "no": 11
+  },
+  {
+    "name": "월계3동 제1투",
+    "bld": "미성경로당 1층",
+    "addr": "서울특별시 노원구 마들로 59",
+    "dong": "월계3동",
+    "no": 12
+  },
+  {
+    "name": "월계3동 제2투",
+    "bld": "이박사삼호체육관 1층",
+    "addr": "서울특별시 노원구 마들로 111",
+    "dong": "월계3동",
+    "no": 13
+  },
+  {
+    "name": "월계3동 제3투",
+    "bld": "한내행복발전소 3층 다목적실",
+    "addr": "서울특별시 노원구 마들로3길 13",
+    "dong": "월계3동",
+    "no": 14
+  },
+  {
+    "name": "월계3동 제4투",
+    "bld": "녹천초등학교 1층 녹천관 로비",
+    "addr": "서울특별시 노원구 마들로3길 34",
+    "dong": "월계3동",
+    "no": 15
+  },
+  {
+    "name": "월계3동 제5투",
+    "bld": "그랑빌경로당 1층 할아버지방",
+    "addr": "서울특별시 노원구 마들로 31",
+    "dong": "월계3동",
+    "no": 16
+  },
+  {
+    "name": "월계3동 제6투",
+    "bld": "한천초등학교 1층 다모임실",
+    "addr": "서울특별시 노원구 마들로 45",
+    "dong": "월계3동",
+    "no": 17
+  },
+  {
+    "name": "월계3동 제7투",
+    "bld": "그랑빌경로당 1층 할머니방",
+    "addr": "서울특별시 노원구 마들로 31",
+    "dong": "월계3동",
+    "no": 18
+  },
+  {
+    "name": "월계3동 제8투",
+    "bld": "사슴2단지경로당 1층",
+    "addr": "서울특별시 노원구 월계로55길 16",
+    "dong": "월계3동",
+    "no": 19
+  },
+  {
+    "name": "월계3동 제9투",
+    "bld": "녹천중학교 본관 1층 중앙현관로비",
+    "addr": "서울특별시 노원구 월계로 376",
+    "dong": "월계3동",
+    "no": 20
+  },
+  {
+    "name": "공릉1동 제1투",
+    "bld": "노원프레미어스엠코 지하1층 공릉평생교육원",
+    "addr": "서울특별시 노원구 동일로 986",
+    "dong": "공릉1동",
+    "no": 21
+  },
+  {
+    "name": "공릉1동 제2투",
+    "bld": "공릉초등학교 도담관 2층 체육관",
+    "addr": "서울특별시 노원구 동일로173길 12",
+    "dong": "공릉1동",
+    "no": 22
+  },
+  {
+    "name": "공릉1동 제3투",
+    "bld": "공릉1동주민센터 3층 다목적방",
+    "addr": "서울특별시 노원구 동일로186길 3-24",
+    "dong": "공릉1동",
+    "no": 23
+  },
+  {
+    "name": "공릉1동 제4투",
+    "bld": "공릉행복발전소 1층 경로당",
+    "addr": "서울특별시 노원구 동일로179길 22",
+    "dong": "공릉1동",
+    "no": 24
+  },
+  {
+    "name": "공릉1동 제5투",
+    "bld": "공릉종합사회복지관 1층 경로당",
+    "addr": "서울특별시 노원구 동일로 1127",
+    "dong": "공릉1동",
+    "no": 25
+  },
+  {
+    "name": "공릉1동 제6투",
+    "bld": "공릉2단지아파트 관리사무소 1층 경로당",
+    "addr": "서울특별시 노원구 동일로198가길 149",
+    "dong": "공릉1동",
+    "no": 26
+  },
+  {
+    "name": "공릉1동 제7투",
+    "bld": "공연초등학교 2층 2-3교실",
+    "addr": "서울특별시 노원구 동일로192가길 16",
+    "dong": "공릉1동",
+    "no": 27
+  },
+  {
+    "name": "공릉1동 제8투",
+    "bld": "노원문화원 1층 다목적공연장",
+    "addr": "서울특별시 노원구 동일로197길 24",
+    "dong": "공릉1동",
+    "no": 28
+  },
+  {
+    "name": "공릉1동 제9투",
+    "bld": "용원초등학교 용원꿈누리관 2층 대강당",
+    "addr": "서울특별시 노원구 섬밭로 144",
+    "dong": "공릉1동",
+    "no": 29
+  },
+  {
+    "name": "공릉2동 제1투",
+    "bld": "공릉2동주민센터 1층 주민쉼터",
+    "addr": "서울특별시 노원구 노원로1길 68",
+    "dong": "공릉2동",
+    "no": 30
+  },
+  {
+    "name": "공릉2동 제2투",
+    "bld": "우방아파트 경로당 1층",
+    "addr": "서울특별시 노원구 노원로 58",
+    "dong": "공릉2동",
+    "no": 31
+  },
+  {
+    "name": "공릉2동 제3투",
+    "bld": "경춘선힐링쉼터 1층 북카페",
+    "addr": "서울특별시 노원구 공릉로51길 20",
+    "dong": "공릉2동",
+    "no": 32
+  },
+  {
+    "name": "공릉2동 제4투",
+    "bld": "공릉구민체육센터 2층 다목적체육관",
+    "addr": "서울특별시 노원구 공릉로34길 81",
+    "dong": "공릉2동",
+    "no": 33
+  },
+  {
+    "name": "공릉2동 제5투",
+    "bld": "삼익포레스트아파트 경로당 1층",
+    "addr": "서울특별시 노원구 공릉로46길 32",
+    "dong": "공릉2동",
+    "no": 34
+  },
+  {
+    "name": "공릉2동 제6투",
+    "bld": "공릉보건지소 지하1층 보건교육실",
+    "addr": "서울특별시 노원구 공릉로 166-1",
+    "dong": "공릉2동",
+    "no": 35
+  },
+  {
+    "name": "공릉2동 제7투",
+    "bld": "공릉노인복지관 지하1층 식당",
+    "addr": "서울특별시 노원구 공릉로 129",
+    "dong": "공릉2동",
+    "no": 36
+  },
+  {
+    "name": "공릉2동 제8투",
+    "bld": "태랑중학교 1층 체육관",
+    "addr": "서울특별시 노원구 화랑로51나길 51",
+    "dong": "공릉2동",
+    "no": 37
+  },
+  {
+    "name": "공릉2동 제9투",
+    "bld": "공릉아파트 경로당 1층",
+    "addr": "서울특별시 노원구 화랑로51길 81",
+    "dong": "공릉2동",
+    "no": 38
+  },
+  {
+    "name": "하계1동 제1투",
+    "bld": "하계중학교 1층 본관 디지털미디어센터",
+    "addr": "서울특별시 노원구 노원로 261-8",
+    "dong": "하계1동",
+    "no": 39
+  },
+  {
+    "name": "하계1동 제2투",
+    "bld": "불암중학교 1층 체육관동 시청각실",
+    "addr": "서울특별시 노원구 한글비석로5길 45",
+    "dong": "하계1동",
+    "no": 40
+  },
+  {
+    "name": "하계1동 제3투",
+    "bld": "하계종합사회복지관 1층 탁구장",
+    "addr": "서울특별시 노원구 노원로16길 15",
+    "dong": "하계1동",
+    "no": 41
+  },
+  {
+    "name": "하계1동 제4투",
+    "bld": "한청경로당 1층",
+    "addr": "서울특별시 노원구 공릉로 351",
+    "dong": "하계1동",
+    "no": 42
+  },
+  {
+    "name": "하계1동 제5투",
+    "bld": "연촌초등학교 1층 본관 로비",
+    "addr": "서울특별시 노원구 공릉로58길 36",
+    "dong": "하계1동",
+    "no": 43
+  },
+  {
+    "name": "하계1동 제6투",
+    "bld": "청솔아파트 관리사무소 1층 회의실",
+    "addr": "서울특별시 노원구 공릉로59길 25",
+    "dong": "하계1동",
+    "no": 44
+  },
+  {
+    "name": "하계2동 제1투",
+    "bld": "장미아파트 관리사무소 1층 회의실",
+    "addr": "서울특별시 노원구 섬밭로 196",
+    "dong": "하계2동",
+    "no": 45
+  },
+  {
+    "name": "하계2동 제2투",
+    "bld": "중현초등학교 1층 꿈자람터",
+    "addr": "서울특별시 노원구 섬밭로 181",
+    "dong": "하계2동",
+    "no": 46
+  },
+  {
+    "name": "하계2동 제3투",
+    "bld": "현우경로당 1층 현대우성아파트 내",
+    "addr": "서울특별시 노원구 섬밭로 232",
+    "dong": "하계2동",
+    "no": 47
+  },
+  {
+    "name": "하계2동 제4투",
+    "bld": "중평초등학교 1층 체육관 어울채",
+    "addr": "서울특별시 노원구 섬밭로 241",
+    "dong": "하계2동",
+    "no": 48
+  },
+  {
+    "name": "하계2동 제5투",
+    "bld": "중평중학교 1층 가정실",
+    "addr": "서울특별시 노원구 동일로203길 87",
+    "dong": "하계2동",
+    "no": 49
+  },
+  {
+    "name": "중계본동 제1투",
+    "bld": "중계본동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 중계로 143",
+    "dong": "중계본동",
+    "no": 50
+  },
+  {
+    "name": "중계본동 제2투",
+    "bld": "불암도서관 지하1층 플랫폼B",
+    "addr": "서울특별시 노원구 중계로 106",
+    "dong": "중계본동",
+    "no": 51
+  },
+  {
+    "name": "중계본동 제3투",
+    "bld": "수암초등학교 수암관 1층 체육관",
+    "addr": "서울특별시 노원구 중계로12길 9",
+    "dong": "중계본동",
+    "no": 52
+  },
+  {
+    "name": "중계본동 제4투",
+    "bld": "불암고등학교 1층 도서관",
+    "addr": "서울특별시 노원구 중계로 155",
+    "dong": "중계본동",
+    "no": 53
+  },
+  {
+    "name": "중계본동 제5투",
+    "bld": "불암초등학교 1층 체육관",
+    "addr": "서울특별시 노원구 중계로 178",
+    "dong": "중계본동",
+    "no": 54
+  },
+  {
+    "name": "중계1동 제1투",
+    "bld": "중계1동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 한글비석로 279",
+    "dong": "중계1동",
+    "no": 55
+  },
+  {
+    "name": "중계1동 제2투",
+    "bld": "원광초등학교 1층 중앙현관",
+    "addr": "서울특별시 노원구 덕릉로76길 18",
+    "dong": "중계1동",
+    "no": 56
+  },
+  {
+    "name": "중계1동 제3투",
+    "bld": "청암중고등학교 1층 구 유치원",
+    "addr": "서울특별시 노원구 중계로 244",
+    "dong": "중계1동",
+    "no": 57
+  },
+  {
+    "name": "중계1동 제4투",
+    "bld": "을지초등학교 1층 1-7반",
+    "addr": "서울특별시 노원구 중계로 239",
+    "dong": "중계1동",
+    "no": 58
+  },
+  {
+    "name": "중계1동 제5투",
+    "bld": "서라벌고등학교 1층 송덕도서관",
+    "addr": "서울특별시 노원구 한글비석로5길 18",
+    "dong": "중계1동",
+    "no": 59
+  },
+  {
+    "name": "중계2·3동 제1투",
+    "bld": "노원구민의전당 1층 레크레이션실",
+    "addr": "서울특별시 노원구 동일로 1229",
+    "dong": "중계2·3동",
+    "no": 60
+  },
+  {
+    "name": "중계2·3동 제2투",
+    "bld": "노원구민의전당 1층 로비",
+    "addr": "서울특별시 노원구 동일로 1229",
+    "dong": "중계2·3동",
+    "no": 61
+  },
+  {
+    "name": "중계2·3동 제3투",
+    "bld": "중원초등학교 1층 현관 로비",
+    "addr": "서울특별시 노원구 섬밭로 316",
+    "dong": "중계2·3동",
+    "no": 62
+  },
+  {
+    "name": "중계2·3동 제4투",
+    "bld": "서울아이티고등학교 믿음관 1층",
+    "addr": "서울특별시 노원구 섬밭로 299",
+    "dong": "중계2·3동",
+    "no": 63
+  },
+  {
+    "name": "중계2·3동 제5투",
+    "bld": "중계2·3동주민센터 3층 소강당",
+    "addr": "서울특별시 노원구 노원로17길 56",
+    "dong": "중계2·3동",
+    "no": 64
+  },
+  {
+    "name": "중계2·3동 제6투",
+    "bld": "청계초등학교 1층 현관 로비",
+    "addr": "서울특별시 노원구 공릉로 431",
+    "dong": "중계2·3동",
+    "no": 65
+  },
+  {
+    "name": "중계2·3동 제7투",
+    "bld": "마들종합사회복지관 1층 식당",
+    "addr": "서울특별시 노원구 동일로210길 22",
+    "dong": "중계2·3동",
+    "no": 66
+  },
+  {
+    "name": "중계2·3동 제8투",
+    "bld": "중원중학교 본관 1층 가사실",
+    "addr": "서울특별시 노원구 공릉로 420",
+    "dong": "중계2·3동",
+    "no": 67
+  },
+  {
+    "name": "중계2·3동 제9투",
+    "bld": "평화종합사회복지관 1층 식당",
+    "addr": "서울특별시 노원구 노원로 331",
+    "dong": "중계2·3동",
+    "no": 68
+  },
+  {
+    "name": "중계2·3동 제10투",
+    "bld": "목화아파트 경로당 1층",
+    "addr": "서울특별시 노원구 노원로19길 31",
+    "dong": "중계2·3동",
+    "no": 69
+  },
+  {
+    "name": "중계4동 제1투",
+    "bld": "중계4동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 덕릉로82길 50",
+    "dong": "중계4동",
+    "no": 70
+  },
+  {
+    "name": "중계4동 제2투",
+    "bld": "중계종합사회복지관 1층 경로식당",
+    "addr": "서울특별시 노원구 덕릉로 662",
+    "dong": "중계4동",
+    "no": 71
+  },
+  {
+    "name": "중계4동 제3투",
+    "bld": "중계초등학교 1층 다목적실",
+    "addr": "서울특별시 노원구 한글비석로19길 39",
+    "dong": "중계4동",
+    "no": 72
+  },
+  {
+    "name": "중계4동 제4투",
+    "bld": "상계제일중학교 1층 시청각실 로비",
+    "addr": "서울특별시 노원구 덕릉로86길 29-15",
+    "dong": "중계4동",
+    "no": 73
+  },
+  {
+    "name": "상계1동 제1투",
+    "bld": "상계1동주민센터 5층 다목적실",
+    "addr": "서울특별시 노원구 동일로 1697",
+    "dong": "상계1동",
+    "no": 74
+  },
+  {
+    "name": "상계1동 제2투",
+    "bld": "수락초등학교 2층 체육관",
+    "addr": "서울특별시 노원구 동일로 1745",
+    "dong": "상계1동",
+    "no": 75
+  },
+  {
+    "name": "상계1동 제3투",
+    "bld": "은빛2단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로245가길 41",
+    "dong": "상계1동",
+    "no": 76
+  },
+  {
+    "name": "상계1동 제4투",
+    "bld": "수락중학교 1층 하랑관",
+    "addr": "서울특별시 노원구 동일로 1729",
+    "dong": "상계1동",
+    "no": 77
+  },
+  {
+    "name": "상계1동 제5투",
+    "bld": "노일중학교 1층 체육동아리실",
+    "addr": "서울특별시 노원구 동일로231길 24",
+    "dong": "상계1동",
+    "no": 78
+  },
+  {
+    "name": "상계1동 제6투",
+    "bld": "노일초등학교 1층 늘봄교실",
+    "addr": "서울특별시 노원구 동일로 1625",
+    "dong": "상계1동",
+    "no": 79
+  },
+  {
+    "name": "상계1동 제7투",
+    "bld": "극동늘푸른아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로246길 39",
+    "dong": "상계1동",
+    "no": 80
+  },
+  {
+    "name": "상계1동 제8투",
+    "bld": "노원초등학교 본관 2층 어울림터",
+    "addr": "서울특별시 노원구 동일로230나길 32",
+    "dong": "상계1동",
+    "no": 81
+  },
+  {
+    "name": "상계2동 제1투",
+    "bld": "상계2동공공복합청사 4층 대강당",
+    "addr": "서울특별시 노원구 상계로 118",
+    "dong": "상계2동",
+    "no": 82
+  },
+  {
+    "name": "상계2동 제2투",
+    "bld": "상계초등학교 1층 중앙복도",
+    "addr": "서울특별시 노원구 상계로9길 39",
+    "dong": "상계2동",
+    "no": 83
+  },
+  {
+    "name": "상계2동 제3투",
+    "bld": "구립청솔경로당 1층",
+    "addr": "서울특별시 노원구 노원로30길 73",
+    "dong": "상계2동",
+    "no": 84
+  },
+  {
+    "name": "상계2동 제4투",
+    "bld": "상계중학교 1층 동아리실",
+    "addr": "서울특별시 노원구 노원로 398",
+    "dong": "상계2동",
+    "no": 85
+  },
+  {
+    "name": "상계3·4동 제1투",
+    "bld": "신상계초등학교 2층 체육관",
+    "addr": "서울특별시 노원구 상계로 267",
+    "dong": "상계3·4동",
+    "no": 86
+  },
+  {
+    "name": "상계3·4동 제2투",
+    "bld": "노원롯데캐슬시그니처아파트 105동 지하1층 커뮤니티시설 내 도서관",
+    "addr": "서울특별시 노원구 덕릉로 753",
+    "dong": "상계3·4동",
+    "no": 87
+  },
+  {
+    "name": "상계3·4동 제3투",
+    "bld": "상계불암대림아파트경로당 1층",
+    "addr": "서울특별시 노원구 덕릉로94길 21",
+    "dong": "상계3·4동",
+    "no": 88
+  },
+  {
+    "name": "상계3·4동 제4투",
+    "bld": "동아불암아파트경로당 1층",
+    "addr": "서울특별시 노원구 덕릉로 780",
+    "dong": "상계3·4동",
+    "no": 89
+  },
+  {
+    "name": "상계3·4동 제5투",
+    "bld": "상계종합사회복지관 2층 대강당",
+    "addr": "서울특별시 노원구 덕릉로115나길 25",
+    "dong": "상계3·4동",
+    "no": 90
+  },
+  {
+    "name": "상계3·4동 제6투",
+    "bld": "청암1단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 덕릉로112길 24",
+    "dong": "상계3·4동",
+    "no": 91
+  },
+  {
+    "name": "상계3·4동 제7투",
+    "bld": "상계3·4동주민센터 2층 다용도실",
+    "addr": "서울특별시 노원구 덕릉로 859",
+    "dong": "상계3·4동",
+    "no": 92
+  },
+  {
+    "name": "상계5동 제1투",
+    "bld": "상계5동주민센터 3층 강당",
+    "addr": "서울특별시 노원구 한글비석로 434",
+    "dong": "상계5동",
+    "no": 93
+  },
+  {
+    "name": "상계5동 제2투",
+    "bld": "벽산아파트 관리사무소 1층 회의실",
+    "addr": "서울특별시 노원구 한글비석로 396",
+    "dong": "상계5동",
+    "no": 94
+  },
+  {
+    "name": "상계5동 제3투",
+    "bld": "계상초등학교 1층 휴게실",
+    "addr": "서울특별시 노원구 한글비석로41가길 24",
+    "dong": "상계5동",
+    "no": 95
+  },
+  {
+    "name": "상계5동 제4투",
+    "bld": "한신2차아파트 관리사무소 1층 경로당",
+    "addr": "서울특별시 노원구 한글비석로48길 6",
+    "dong": "상계5동",
+    "no": 96
+  },
+  {
+    "name": "상계5동 제5투",
+    "bld": "한신1차아파트 관리사무소 1층 경로당",
+    "addr": "서울특별시 노원구 한글비석로46가길 16",
+    "dong": "상계5동",
+    "no": 97
+  },
+  {
+    "name": "상계5동 제6투",
+    "bld": "대림아파트 관리사무소 2층 경로당",
+    "addr": "서울특별시 노원구 상계로 193-14",
+    "dong": "상계5동",
+    "no": 98
+  },
+  {
+    "name": "상계6·7동 제1투",
+    "bld": "상계고등학교 북관 1층 화학실험실",
+    "addr": "서울특별시 노원구 노해로 432",
+    "dong": "상계6·7동",
+    "no": 99
+  },
+  {
+    "name": "상계6·7동 제2투",
+    "bld": "노원중학교 본관 1층 협력종합예술실",
+    "addr": "서울특별시 노원구 동일로213길 26",
+    "dong": "상계6·7동",
+    "no": 100
+  },
+  {
+    "name": "상계6·7동 제3투",
+    "bld": "당현초등학교 정보체육관 1층 체육관 영어전용교실",
+    "addr": "서울특별시 노원구 동일로213길 52",
+    "dong": "상계6·7동",
+    "no": 101
+  },
+  {
+    "name": "상계6·7동 제4투",
+    "bld": "상천초등학교 체육관 1층 현관로비",
+    "addr": "서울특별시 노원구 덕릉로 443",
+    "dong": "상계6·7동",
+    "no": 102
+  },
+  {
+    "name": "상계6·7동 제5투",
+    "bld": "상계주공6단지 경로당 1층",
+    "addr": "서울특별시 노원구 노해로 508",
+    "dong": "상계6·7동",
+    "no": 103
+  },
+  {
+    "name": "상계6·7동 제6투",
+    "bld": "신상중학교 본관 1층 학부모회의실",
+    "addr": "서울특별시 노원구 동일로216길 42",
+    "dong": "상계6·7동",
+    "no": 104
+  },
+  {
+    "name": "상계6·7동 제7투",
+    "bld": "상수초등학교 본관 1층 학생자치실",
+    "addr": "서울특별시 노원구 동일로216길 66",
+    "dong": "상계6·7동",
+    "no": 105
+  },
+  {
+    "name": "상계8동 제1투",
+    "bld": "상계8동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 동일로227길 97",
+    "dong": "상계8동",
+    "no": 106
+  },
+  {
+    "name": "상계8동 제2투",
+    "bld": "상계주공10단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 노원로 564",
+    "dong": "상계8동",
+    "no": 107
+  },
+  {
+    "name": "상계8동 제3투",
+    "bld": "상계주공11단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로227길 25",
+    "dong": "상계8동",
+    "no": 108
+  },
+  {
+    "name": "상계8동 제4투",
+    "bld": "상경중학교 1층 교사연구연수실",
+    "addr": "서울특별시 노원구 동일로227길 61",
+    "dong": "상계8동",
+    "no": 109
+  },
+  {
+    "name": "상계8동 제5투",
+    "bld": "상계주공16단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로227길 86",
+    "dong": "상계8동",
+    "no": 110
+  },
+  {
+    "name": "상계9동 제1투",
+    "bld": "상계9동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 한글비석로 487",
+    "dong": "상계9동",
+    "no": 111
+  },
+  {
+    "name": "상계9동 제2투",
+    "bld": "보람아파트 경로당 1층",
+    "addr": "서울특별시 노원구 한글비석로 479",
+    "dong": "상계9동",
+    "no": 112
+  },
+  {
+    "name": "상계9동 제3투",
+    "bld": "상계주공12단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 한글비석로 530",
+    "dong": "상계9동",
+    "no": 113
+  },
+  {
+    "name": "상계9동 제4투",
+    "bld": "상계주공14단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로228길 23",
+    "dong": "상계9동",
+    "no": 114
+  },
+  {
+    "name": "상계10동 제1투",
+    "bld": "상계10동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 노원로 530",
+    "dong": "상계10동",
+    "no": 115
+  },
+  {
+    "name": "상계10동 제2투",
+    "bld": "상계주공7단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로 1456",
+    "dong": "상계10동",
+    "no": 116
+  },
+  {
+    "name": "상계10동 제3투",
+    "bld": "상곡초등학교 1층 중앙현관",
+    "addr": "서울특별시 노원구 노원로38길 34",
+    "dong": "상계10동",
+    "no": 117
+  },
+  {
+    "name": "상계10동 제4투",
+    "bld": "상계주공9단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 노원로 532",
+    "dong": "상계10동",
+    "no": 118
+  }
 ];
 
 function geocodeNaver(addr){
@@ -420,8 +1245,8 @@ async function kakaoSearch(query){
 }
 function makeVoteMarker(s,type){
   const isPre=type==='pre';
-  const color=isPre?'#2563eb':'#ff4757';
-  const icon=isPre?'🗳':'📍';
+  const color=isPre?'#2563eb':'#f59e0b';
+  const icon=isPre?'🗳':'🏫';
   const m=new naver.maps.Marker({
     position:new naver.maps.LatLng(s.lat,s.lng),map,
     icon:{content:`<div style="background:${color};color:#fff;border:1px solid #fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:8px;box-shadow:0 1px 5px rgba(0,0,0,.5);transform:translate(-7px,-7px);cursor:pointer;">${icon}</div>`,anchor:new naver.maps.Point(0,0)},
@@ -430,7 +1255,7 @@ function makeVoteMarker(s,type){
   naver.maps.Event.addListener(m,'click',()=>{
     const popup=document.getElementById('votePopup');
     popup.className=`vote-popup show ${type}`;
-    document.getElementById('vpType').textContent=isPre?'🗳 사전투표소 · 노원구':'📍 선거일투표소 · 노원구';
+    document.getElementById('vpType').textContent=isPre?'🗳 사전투표소 · 노원구':'🏫 본투표소 · 노원구';
     document.getElementById('vpName').textContent=s.name;
     document.getElementById('vpBld').textContent=s.bld;
     document.getElementById('vpAddr').textContent=s.addr;
@@ -451,16 +1276,16 @@ function makeVoteMarker(s,type){
 async function initMarkers(type){
   const data=type==='pre'?PRE:DAY;
   for(const s of data){
-    if(s.lat&&s.lng){markers[type].push(makeVoteMarker(s,type));continue;}
+    if(s.lat&&s.lng){const marker=makeVoteMarker(s,type);marker.setMap(showing[type]?map:null);markers[type].push(marker);continue;}
     const coord=await geocodeNaver(s.addr);
     if(!coord){console.warn('geocode 실패:',s.addr);continue;}
-    s.lat=coord.lat;s.lng=coord.lng;markers[type].push(makeVoteMarker(s,type));
+    s.lat=coord.lat;s.lng=coord.lng;const marker=makeVoteMarker(s,type);marker.setMap(showing[type]?map:null);markers[type].push(marker);
   }
 }
 function toggleMarkers(type){
   showing[type]=!showing[type];
   markers[type].forEach(m=>m.setMap(showing[type]?map:null));
-  document.getElementById(type==='pre'?'preBtn':'dayBtn').classList.toggle(type==='pre'?'on-blue':'on-red',showing[type]);
+  document.getElementById(type==='pre'?'preBtn':'dayBtn').classList.toggle(type==='pre'?'on-blue':'on-orange',showing[type]);
 }
 initMarkers('pre');initMarkers('day');
 
