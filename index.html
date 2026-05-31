@@ -69,13 +69,13 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .ib.on-purple{background:#a855f7;color:#fff;border-color:#a855f7}
 .ib.on-blue{background:#2563eb;color:#fff;border-color:#2563eb}
 .ib.on-red{background:#ff4757;color:#fff;border-color:#ff4757}
-.ib.on-orange{background:#f59e0b;color:#111;border-color:#f59e0b;font-weight:700}
+.ib.on-orange{background:#ff4757;color:#fff;border-color:#ff4757;font-weight:700}
 .vote-popup{position:absolute;bottom:14px;left:10px;z-index:600;background:rgba(15,17,23,0.95);border-radius:12px;padding:10px 14px;max-width:240px;display:none;backdrop-filter:blur(10px)}
 .vote-popup.show{display:block}
 .vote-popup.pre{border:1px solid #2563eb}
-.vote-popup.day{border:1px solid #f59e0b}
+.vote-popup.day{border:1px solid #ff4757}
 .vp-type{font-size:9px;font-weight:700;letter-spacing:1px;margin-bottom:4px}
-.pre .vp-type{color:#2563eb}.day .vp-type{color:#f59e0b}
+.pre .vp-type{color:#2563eb}.day .vp-type{color:#ff4757}
 .vp-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
 .vp-bld{font-size:10px;color:#a0aec0;margin-bottom:2px}
 .vp-addr{font-size:10px;color:var(--mu);line-height:1.5}
@@ -166,7 +166,7 @@ input[type=range]:disabled{opacity:.4}
     <div class="help-section">
       <div class="help-section-title">🗳 투표소 찾기</div>
       <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 19곳 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
-      <div class="help-row"><div class="help-icon">🏫</div><div class="help-text"><b>주황 버튼</b> → 본투표소 118곳 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">🏫</div><div class="help-text"><b>빨간 버튼</b> → 본투표소 118곳 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
       <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>투표소 핀 터치</b> → 투표소명·장소·주소·시간·내위치 거리 확인</div></div>
     </div>
     <hr class="help-divider">
@@ -259,8 +259,8 @@ input[type=range]:disabled{opacity:.4}
       </svg>
     </div>
     <button class="ib on-purple" id="dongBtn" onclick="toggleDong()">🏘</button>
-    <button class="ib on-blue" id="preBtn" onclick="toggleMarkers('pre')">🗳</button>
-    <button class="ib" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">🏫</button>
+    <button class="ib" id="preBtn" onclick="toggleMarkers('pre')">🗳</button>
+    <button class="ib on-orange" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">🏫</button>
     <button class="ib" id="lockBtn" onclick="toggleLock()">🔓</button>
     <button class="ib" id="trackBtn" onclick="toggleTracking()">◎</button>
     <button class="ib" onclick="locateOnce()">⊕</button>
@@ -308,7 +308,7 @@ let rM=500,watchId=null,isTracking=false,isLocked=false,lastHeading=0;
 let myLat=null,myLng=null;
 let dongPolygons=[],showDong=true,dongBounds={};
 const markers={pre:[],day:[]};
-const showing={pre:true,day:false};
+const showing={pre:false,day:true};
 
 let selectedDongSet=null; // null이면 전체 선택, Set이면 중복 선택 목록
 const NOWON_DONGS=['월계1동','월계2동','월계3동','공릉1동','공릉2동','하계1동','하계2동','중계본동','중계1동','중계2·3동','중계4동','상계1동','상계2동','상계3·4동','상계5동','상계6·7동','상계8동','상계9동','상계10동'];
@@ -1444,7 +1444,7 @@ async function kakaoSearch(query){
 }
 function makeVoteMarker(s,type){
   const isPre=type==='pre';
-  const color=isPre?'#2563eb':'#f59e0b';
+  const color=isPre?'#2563eb':'#ff4757';
   const icon=isPre?'🗳':'🏫';
   const m=new naver.maps.Marker({
     position:new naver.maps.LatLng(s.lat,s.lng),map,
