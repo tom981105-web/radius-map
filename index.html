@@ -39,6 +39,25 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .tbs{position:absolute;top:12px;right:10px;z-index:500;display:flex;flex-direction:column;gap:3px}
 .tb{padding:5px 10px;background:rgba(12,14,20,.85);backdrop-filter:blur(6px);border:1px solid var(--bd);border-radius:6px;color:var(--mu);font-size:10px;cursor:pointer;white-space:nowrap;transition:all .2s}
 .tb.on{background:var(--g);color:#fff;border-color:var(--g);font-weight:700}
+
+.dong-filter{position:absolute;top:12px;left:10px;z-index:501;width:150px;max-height:calc(100% - 24px);background:rgba(12,14,20,.88);border:1px solid var(--bd);border-radius:14px;padding:9px;backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,.25);overflow-y:auto;transition:width .18s ease,max-height .18s ease,padding .18s ease}
+.dong-filter.collapsed{width:44px;max-height:44px;padding:7px;overflow:hidden}
+.dong-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;gap:5px}
+.dong-filter.collapsed .dong-title{margin-bottom:0;justify-content:center}
+.dong-main-title{flex:1;background:none;border:none;color:#fff;font-size:11px;font-weight:900;text-align:left;cursor:pointer;display:flex;align-items:center;gap:4px;min-width:0}
+.dong-now{font-size:9px;color:var(--mu);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56px}
+.dong-collapse-btn{width:25px;height:24px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(255,255,255,.05);color:#cbd5e1;font-size:10px;font-weight:900;cursor:pointer;flex-shrink:0}
+.dong-filter.collapsed .dong-main-title .dong-label,.dong-filter.collapsed .dong-now,.dong-filter.collapsed .dong-collapse-btn,.dong-filter.collapsed .dong-list{display:none}
+.dong-list{display:flex;flex-direction:column;gap:5px}
+.dong-group-btn{width:100%;margin-top:4px;padding:6px 8px;border:1px solid rgba(245,158,11,.18);border-radius:9px;background:rgba(245,158,11,.08);color:#f59e0b;font-size:10px;font-weight:900;letter-spacing:.2px;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .15s;white-space:nowrap}
+.dong-group-btn.on{background:#f59e0b;color:#111;border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.18)}
+.dong-group-btn.partial{border-color:#f59e0b;background:rgba(245,158,11,.16);color:#ffd166}
+.dong-group-btn .arr{display:none}
+.dong-sub{display:flex;flex-direction:column;gap:4px;margin:4px 0 3px 7px;padding-left:6px;border-left:1px solid rgba(255,255,255,.10)}
+.dong-opt{width:100%;padding:6px 8px;border:1px solid var(--bd);border-radius:9px;background:rgba(255,255,255,.04);color:#cbd5e1;font-size:11px;font-weight:700;text-align:left;cursor:pointer;transition:all .15s;white-space:nowrap}
+.dong-opt.on{background:var(--g);border-color:var(--g);color:#fff;box-shadow:0 0 0 2px rgba(3,199,90,.18)}
+.dong-opt.all{color:#f59e0b}.dong-opt.all.on{color:#fff}
+@media(max-width:720px){.dong-filter{width:132px;max-height:48%;padding:8px}.dong-filter.collapsed{width:42px;max-height:42px;padding:7px}.dong-opt{font-size:10px;padding:5px 7px}.dong-main-title{font-size:10px}.dong-group-btn{font-size:9px;padding:5px 7px}.dong-now{max-width:45px}}
 .btns{position:absolute;bottom:14px;right:10px;z-index:500;display:flex;flex-direction:column;gap:6px;align-items:center}
 #compass{width:40px;height:40px;pointer-events:none;flex-shrink:0}
 #compass svg{width:100%;height:100%;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
@@ -48,13 +67,13 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .ib.on-purple{background:#a855f7;color:#fff;border-color:#a855f7}
 .ib.on-blue{background:#2563eb;color:#fff;border-color:#2563eb}
 .ib.on-red{background:#ff4757;color:#fff;border-color:#ff4757}
-.ib.on-orange{background:#f59e0b;color:#111;border-color:#f59e0b;font-weight:700}
+.ib.on-orange{background:#ff4757;color:#fff;border-color:#ff4757;font-weight:700}
 .vote-popup{position:absolute;bottom:14px;left:10px;z-index:600;background:rgba(15,17,23,0.95);border-radius:12px;padding:10px 14px;max-width:240px;display:none;backdrop-filter:blur(10px)}
 .vote-popup.show{display:block}
 .vote-popup.pre{border:1px solid #2563eb}
-.vote-popup.day{border:1px solid #f59e0b}
+.vote-popup.day{border:1px solid #ff4757}
 .vp-type{font-size:9px;font-weight:700;letter-spacing:1px;margin-bottom:4px}
-.pre .vp-type{color:#2563eb}.day .vp-type{color:#f59e0b}
+.pre .vp-type{color:#2563eb}.day .vp-type{color:#ff4757}
 .vp-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
 .vp-bld{font-size:10px;color:#a0aec0;margin-bottom:2px}
 .vp-addr{font-size:10px;color:var(--mu);line-height:1.5}
@@ -65,14 +84,13 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .help-modal.show{display:flex}
 .help-box{background:var(--card);border-radius:20px 20px 0 0;padding:20px 18px 36px;width:100%;max-height:85vh;overflow-y:auto;position:relative}
 .help-title{font-family:'Jua',sans-serif;font-size:18px;color:var(--g);margin-bottom:16px;text-align:center}
-.help-title.secret-tap{cursor:pointer;user-select:none}
-.secret-pin{display:none;background:rgba(3,199,90,.08);border:1px solid rgba(3,199,90,.25);border-radius:12px;padding:12px;margin:-6px 0 16px}
-.secret-pin.show{display:block}
-.secret-pin-title{font-size:12px;font-weight:800;color:var(--g);margin-bottom:8px}
+.secret-pin-box{display:none;margin:-4px 0 14px;padding:12px;background:rgba(3,199,90,.08);border:1px solid rgba(3,199,90,.24);border-radius:12px}
+.secret-pin-box.show{display:block}
+.secret-pin-title{font-size:12px;font-weight:800;color:var(--g);margin-bottom:8px;text-align:center}
 .secret-pin-row{display:flex;gap:6px}
-.secret-pin input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:9px 10px;color:#fff;font-size:14px;outline:none}
-.secret-pin button{border:none;border-radius:10px;background:var(--g);color:#fff;font-size:12px;font-weight:800;padding:0 12px;cursor:pointer;white-space:nowrap}
-.secret-pin-msg{font-size:11px;color:var(--red);margin-top:7px;min-height:14px}
+.secret-pin-row input{flex:1;min-width:0;padding:9px 11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:#fff;font-size:14px;outline:none;text-align:center;letter-spacing:2px}
+.secret-pin-row button{padding:9px 12px;border:none;border-radius:10px;background:var(--g);color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.secret-pin-msg{min-height:16px;margin-top:7px;font-size:11px;text-align:center;color:var(--mu)}
 .help-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--mu);font-size:20px;cursor:pointer}
 .help-section{margin-bottom:16px}
 .help-section-title{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:8px;letter-spacing:0.5px}
@@ -130,14 +148,14 @@ input[type=range]:disabled{opacity:.4}
 <div class="help-modal" id="helpModal" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="help-box">
     <button class="help-close" onclick="document.getElementById('helpModal').classList.remove('show')">✕</button>
-    <div class="help-title secret-tap" onclick="handleSecretTitleTap()" title="관리자 메뉴">📱 노원반경측정기 사용법</div>
-    <div class="secret-pin" id="secretPinBox">
-      <div class="secret-pin-title">🔐 관리자 PIN 입력</div>
+    <div class="help-title" id="secretHelpTitle" onclick="secretTitleTap()">📱 노원반경측정기 사용법</div>
+    <div class="secret-pin-box" id="secretPinBox">
+      <div class="secret-pin-title">🔐 관리자 PIN</div>
       <div class="secret-pin-row">
-        <input type="password" id="secretPinInput" inputmode="numeric" maxlength="4" placeholder="PIN 번호" onkeydown="if(event.key==='Enter')checkSecretPin()">
+        <input type="password" id="secretPinInput" inputmode="numeric" maxlength="4" placeholder="PIN 입력" onkeydown="if(event.key==='Enter')checkSecretPin()">
         <button onclick="checkSecretPin()">이동</button>
       </div>
-      <div class="secret-pin-msg" id="secretPinMsg"></div>
+      <div class="secret-pin-msg" id="secretPinMsg">PIN을 입력하면 사진 보고 사이트로 이동합니다.</div>
     </div>
     <div class="help-section">
       <div class="help-section-title">🗺 기본 사용법</div>
@@ -179,6 +197,54 @@ input[type=range]:disabled{opacity:.4}
 
 <div id="mw">
   <div id="map"></div>
+  <div class="dong-filter" id="dongFilter">
+    <div class="dong-title">
+      <button class="dong-main-title" onclick="toggleDongPanel()"><span>🏘</span><span class="dong-label">동 선택</span> <span class="dong-now" id="dongFilterNow">전체</span></button>
+      <button class="dong-collapse-btn" onclick="toggleDongPanel()" title="동 선택 접기/펼치기">접기</button>
+    </div>
+    <div class="dong-list">
+      <button class="dong-opt all on" data-dong="전체" onclick="selectAllDong()">전체</button>
+
+      <button class="dong-group-btn" data-dong="월계동" data-group="월계동" onclick="selectDongGroup('월계동')"><span>월계동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="월계동">
+        <button class="dong-opt" data-dong="월계1동" onclick="selectSubDong('월계1동')">월계1동</button>
+        <button class="dong-opt" data-dong="월계2동" onclick="selectSubDong('월계2동')">월계2동</button>
+        <button class="dong-opt" data-dong="월계3동" onclick="selectSubDong('월계3동')">월계3동</button>
+      </div>
+
+      <button class="dong-group-btn" data-dong="공릉동" data-group="공릉동" onclick="selectDongGroup('공릉동')"><span>공릉동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="공릉동">
+        <button class="dong-opt" data-dong="공릉1동" onclick="selectSubDong('공릉1동')">공릉1동</button>
+        <button class="dong-opt" data-dong="공릉2동" onclick="selectSubDong('공릉2동')">공릉2동</button>
+      </div>
+
+      <button class="dong-group-btn" data-dong="하계동" data-group="하계동" onclick="selectDongGroup('하계동')"><span>하계동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="하계동">
+        <button class="dong-opt" data-dong="하계1동" onclick="selectSubDong('하계1동')">하계1동</button>
+        <button class="dong-opt" data-dong="하계2동" onclick="selectSubDong('하계2동')">하계2동</button>
+      </div>
+
+      <button class="dong-group-btn" data-dong="중계동" data-group="중계동" onclick="selectDongGroup('중계동')"><span>중계동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="중계동">
+        <button class="dong-opt" data-dong="중계본동" onclick="selectSubDong('중계본동')">중계본동</button>
+        <button class="dong-opt" data-dong="중계1동" onclick="selectSubDong('중계1동')">중계1동</button>
+        <button class="dong-opt" data-dong="중계2·3동" onclick="selectSubDong('중계2·3동')">중계2·3동</button>
+        <button class="dong-opt" data-dong="중계4동" onclick="selectSubDong('중계4동')">중계4동</button>
+      </div>
+
+      <button class="dong-group-btn" data-dong="상계동" data-group="상계동" onclick="selectDongGroup('상계동')"><span>상계동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="상계동">
+        <button class="dong-opt" data-dong="상계1동" onclick="selectSubDong('상계1동')">상계1동</button>
+        <button class="dong-opt" data-dong="상계2동" onclick="selectSubDong('상계2동')">상계2동</button>
+        <button class="dong-opt" data-dong="상계3·4동" onclick="selectSubDong('상계3·4동')">상계3·4동</button>
+        <button class="dong-opt" data-dong="상계5동" onclick="selectSubDong('상계5동')">상계5동</button>
+        <button class="dong-opt" data-dong="상계6·7동" onclick="selectSubDong('상계6·7동')">상계6·7동</button>
+        <button class="dong-opt" data-dong="상계8동" onclick="selectSubDong('상계8동')">상계8동</button>
+        <button class="dong-opt" data-dong="상계9동" onclick="selectSubDong('상계9동')">상계9동</button>
+        <button class="dong-opt" data-dong="상계10동" onclick="selectSubDong('상계10동')">상계10동</button>
+      </div>
+    </div>
+  </div>
   <div class="lock-badge" id="lockBadge">🔒 반경 고정됨</div>
   <div class="track-hint" id="trackHint">📍 위치 점을 드래그해 거리 측정</div>
   <div class="tbs">
@@ -206,8 +272,8 @@ input[type=range]:disabled{opacity:.4}
       </svg>
     </div>
     <button class="ib on-purple" id="dongBtn" onclick="toggleDong()">🏘</button>
-    <button class="ib on-blue" id="preBtn" onclick="toggleMarkers('pre')">🗳</button>
-    <button class="ib" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">📍</button>
+    <button class="ib" id="preBtn" onclick="toggleMarkers('pre')">🗳</button>
+    <button class="ib on-orange" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">📍</button>
     <button class="ib" id="lockBtn" onclick="toggleLock()">🔓</button>
     <button class="ib" id="trackBtn" onclick="toggleTracking()">◎</button>
     <button class="ib" onclick="locateOnce()">⊕</button>
@@ -253,35 +319,136 @@ let myDot=null,myAcc=null;
 let myLine=null,myLineLbl=null;
 let rM=500,watchId=null,isTracking=false,isLocked=false,lastHeading=0;
 let myLat=null,myLng=null;
-let dongPolygons=[],showDong=true;
+let dongPolygons=[],showDong=true,dongBounds={};
 const markers={pre:[],day:[]};
-const showing={pre:true,day:false};
+const showing={pre:false,day:true};
 
-let secretTapCount=0,secretTapTimer=null;
-function handleSecretTitleTap(){
-  secretTapCount++;
-  clearTimeout(secretTapTimer);
-  secretTapTimer=setTimeout(()=>secretTapCount=0,1200);
-  if(secretTapCount>=3){
-    secretTapCount=0;
-    const box=document.getElementById('secretPinBox');
-    const input=document.getElementById('secretPinInput');
-    const msg=document.getElementById('secretPinMsg');
-    box.classList.add('show');
-    msg.textContent='';
-    setTimeout(()=>input.focus(),80);
-  }
+let selectedDongSet=null; // null이면 전체 선택, Set이면 중복 선택 목록
+const NOWON_DONGS=['월계1동','월계2동','월계3동','공릉1동','공릉2동','하계1동','하계2동','중계본동','중계1동','중계2·3동','중계4동','상계1동','상계2동','상계3·4동','상계5동','상계6·7동','상계8동','상계9동','상계10동'];
+const DONG_GROUPS={
+  '월계동':['월계1동','월계2동','월계3동'],
+  '공릉동':['공릉1동','공릉2동'],
+  '하계동':['하계1동','하계2동'],
+  '중계동':['중계본동','중계1동','중계2·3동','중계4동'],
+  '상계동':['상계1동','상계2동','상계3·4동','상계5동','상계6·7동','상계8동','상계9동','상계10동']
+};
+const DONG_PARENT=Object.fromEntries(Object.entries(DONG_GROUPS).flatMap(([g,ds])=>ds.map(d=>[d,g])));
+function getStationDong(s){
+  if(s.dong)return s.dong;
+  return (s.name||'').replace(/사전투표소.*/,'').trim();
 }
-function checkSecretPin(){
-  const input=document.getElementById('secretPinInput');
-  const msg=document.getElementById('secretPinMsg');
-  if(input.value==='1105'){
-    window.location.href='https://tom981105-web.github.io/photo-report/';
-  }else{
-    msg.textContent='PIN 번호가 맞지 않습니다.';
-    input.value='';
-    input.focus();
+function getSelectedDongs(){
+  return selectedDongSet===null?NOWON_DONGS:[...selectedDongSet];
+}
+function isDongSelected(dong){
+  return selectedDongSet===null || selectedDongSet.has(dong);
+}
+function isMarkerVisible(m){
+  if(!showing[m._type])return false;
+  return isDongSelected(getStationDong(m._station));
+}
+function refreshMarkerVisibility(){
+  ['pre','day'].forEach(type=>markers[type].forEach(m=>m.setMap(isMarkerVisible(m)?map:null)));
+}
+function getFeatureDong(props){
+  const txt=[props.adm_nm,props.ADM_NM,props.adm_cd2,props.SGG_NM,props.sigungu,props.SIG_KOR_NM].filter(Boolean).join(' ');
+  return NOWON_DONGS.find(d=>txt.includes(d))||'';
+}
+function refreshDongVisibility(){
+  dongPolygons.forEach(p=>{
+    const visible=showDong&&isDongSelected(p._dong);
+    p.setMap(visible?map:null);
+  });
+}
+function mergeBounds(dongs){
+  let merged=null;
+  dongs.forEach(d=>{
+    const b=dongBounds[d];
+    if(!b)return;
+    if(!merged)merged={...b};
+    else{
+      merged.minLat=Math.min(merged.minLat,b.minLat);merged.maxLat=Math.max(merged.maxLat,b.maxLat);
+      merged.minLng=Math.min(merged.minLng,b.minLng);merged.maxLng=Math.max(merged.maxLng,b.maxLng);
+    }
+  });
+  return merged;
+}
+function fitToSelectedDong(){
+  if(selectedDongSet===null)return;
+  const b=mergeBounds(getSelectedDongs());
+  if(!b)return;
+  const bounds=new naver.maps.LatLngBounds(new naver.maps.LatLng(b.minLat,b.minLng),new naver.maps.LatLng(b.maxLat,b.maxLng));
+  map.fitBounds(bounds);
+}
+function openDongGroup(group,open=true){
+  // 대분류/소분류 목록은 항상 펼쳐진 형태로 유지합니다.
+}
+function closeAllDongGroups(){
+  // 전체 선택 시에도 목록은 접히지 않게 유지합니다.
+}
+function toggleDongPanel(){
+  document.getElementById('dongFilter').classList.toggle('collapsed');
+}
+function getDongFilterLabel(){
+  if(selectedDongSet===null)return '전체';
+  const selected=[...selectedDongSet];
+  if(selected.length===0)return '전체';
+  for(const [group,dongs] of Object.entries(DONG_GROUPS)){
+    if(selected.length===dongs.length && dongs.every(d=>selectedDongSet.has(d)))return group;
   }
+  return selected.length===1?selected[0]:`${selected.length}개 선택`;
+}
+function refreshDongButtonState(){
+  const isAll=selectedDongSet===null;
+  document.getElementById('dongFilterNow').textContent=getDongFilterLabel();
+  document.querySelectorAll('.dong-opt.all').forEach(b=>b.classList.toggle('on',isAll));
+  document.querySelectorAll('.dong-opt:not(.all)').forEach(b=>{
+    const dong=b.dataset.dong;
+    b.classList.toggle('on',!isAll&&selectedDongSet.has(dong));
+  });
+  document.querySelectorAll('.dong-group-btn').forEach(b=>{
+    const group=b.dataset.group;
+    const dongs=DONG_GROUPS[group]||[];
+    const count=isAll?0:dongs.filter(d=>selectedDongSet.has(d)).length;
+    b.classList.toggle('on',!isAll&&count===dongs.length&&count>0);
+    b.classList.toggle('partial',!isAll&&count>0&&count<dongs.length);
+  });
+}
+function applyDongFilter(){
+  refreshDongButtonState();
+  refreshMarkerVisibility();
+  refreshDongVisibility();
+  fitToSelectedDong();
+}
+function selectAllDong(){
+  selectedDongSet=null;
+  closeAllDongGroups();
+  applyDongFilter();
+}
+function ensureSelectionSet(){
+  if(selectedDongSet===null)selectedDongSet=new Set();
+}
+function normalizeSelection(){
+  if(!selectedDongSet || selectedDongSet.size===0)selectedDongSet=null;
+}
+function selectDongGroup(group){
+  const dongs=DONG_GROUPS[group]||[];
+  const currentlyAll=selectedDongSet!==null&&dongs.every(d=>selectedDongSet.has(d));
+  ensureSelectionSet();
+  if(currentlyAll)dongs.forEach(d=>selectedDongSet.delete(d));
+  else dongs.forEach(d=>selectedDongSet.add(d));
+  normalizeSelection();
+  openDongGroup(group,true);
+  applyDongFilter();
+}
+function selectSubDong(dong){
+  const group=DONG_PARENT[dong];
+  ensureSelectionSet();
+  if(selectedDongSet.has(dong))selectedDongSet.delete(dong);
+  else selectedDongSet.add(dong);
+  normalizeSelection();
+  if(group)openDongGroup(group,true);
+  applyDongFilter();
 }
 
 function calcDist(a,b){
@@ -1288,17 +1455,19 @@ async function kakaoSearch(query){
 }
 function makeVoteMarker(s,type){
   const isPre=type==='pre';
-  const color=isPre?'#2563eb':'#f59e0b';
+  const color=isPre?'#2563eb':'#ff4757';
   const icon=isPre?'🗳':'📍';
   const m=new naver.maps.Marker({
     position:new naver.maps.LatLng(s.lat,s.lng),map,
     icon:{content:`<div style="background:${color};color:#fff;border:1px solid #fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:8px;box-shadow:0 1px 5px rgba(0,0,0,.5);transform:translate(-7px,-7px);cursor:pointer;">${icon}</div>`,anchor:new naver.maps.Point(0,0)},
     zIndex:isPre?31:30
   });
+  m._station=s;
+  m._type=type;
   naver.maps.Event.addListener(m,'click',()=>{
     const popup=document.getElementById('votePopup');
     popup.className=`vote-popup show ${type}`;
-    document.getElementById('vpType').textContent=isPre?'🗳 사전투표소 · 노원구':'📍 본투표소 · 노원구';
+    document.getElementById('vpType').textContent=isPre?`🗳 사전투표소 · ${getStationDong(s)}`:`📍 본투표소 · ${getStationDong(s)}`;
     document.getElementById('vpName').textContent=s.name;
     document.getElementById('vpBld').textContent=s.bld;
     document.getElementById('vpAddr').textContent=s.addr;
@@ -1319,15 +1488,24 @@ function makeVoteMarker(s,type){
 async function initMarkers(type){
   const data=type==='pre'?PRE:DAY;
   for(const s of data){
-    if(s.lat&&s.lng){const marker=makeVoteMarker(s,type);marker.setMap(showing[type]?map:null);markers[type].push(marker);continue;}
+    if(s.lat&&s.lng){
+      const marker=makeVoteMarker(s,type);
+      markers[type].push(marker);
+      marker.setMap(isMarkerVisible(marker)?map:null);
+      continue;
+    }
     const coord=await geocodeNaver(s.addr);
     if(!coord){console.warn('geocode 실패:',s.addr);continue;}
-    s.lat=coord.lat;s.lng=coord.lng;const marker=makeVoteMarker(s,type);marker.setMap(showing[type]?map:null);markers[type].push(marker);
+    s.lat=coord.lat;s.lng=coord.lng;
+    const marker=makeVoteMarker(s,type);
+    markers[type].push(marker);
+    marker.setMap(isMarkerVisible(marker)?map:null);
   }
+  refreshMarkerVisibility();
 }
 function toggleMarkers(type){
   showing[type]=!showing[type];
-  markers[type].forEach(m=>m.setMap(showing[type]?map:null));
+  refreshMarkerVisibility();
   document.getElementById(type==='pre'?'preBtn':'dayBtn').classList.toggle(type==='pre'?'on-blue':'on-orange',showing[type]);
 }
 initMarkers('pre');initMarkers('day');
@@ -1342,18 +1520,30 @@ async function drawDong(){
       return (p.SGG_NM&&p.SGG_NM.includes('노원구'))||(p.sigungu&&p.sigungu.includes('노원구'))||
              (p.adm_nm&&p.adm_nm.includes('노원구'))||(p.SIG_KOR_NM&&p.SIG_KOR_NM.includes('노원구'));
     }).forEach((f,i)=>{
+      const dong=getFeatureDong(f.properties||{});
       const color=DONG_COLORS[i%DONG_COLORS.length];
       const arr=f.geometry.type==='MultiPolygon'?f.geometry.coordinates.map(p=>p[0]):[f.geometry.coordinates[0]];
       arr.forEach(ca=>{
-        dongPolygons.push(new naver.maps.Polygon({
-          map,paths:[ca.map(c=>new naver.maps.LatLng(c[1],c[0]))],
+        const path=ca.map(c=>new naver.maps.LatLng(c[1],c[0]));
+        path.forEach(ll=>{
+          if(!dong)return;
+          if(!dongBounds[dong])dongBounds[dong]={minLat:ll.lat(),maxLat:ll.lat(),minLng:ll.lng(),maxLng:ll.lng()};
+          const b=dongBounds[dong];
+          b.minLat=Math.min(b.minLat,ll.lat());b.maxLat=Math.max(b.maxLat,ll.lat());
+          b.minLng=Math.min(b.minLng,ll.lng());b.maxLng=Math.max(b.maxLng,ll.lng());
+        });
+        const poly=new naver.maps.Polygon({
+          map:null,paths:[path],
           strokeColor:color,strokeWeight:2,strokeOpacity:.9,fillColor:color,fillOpacity:.12
-        }));
+        });
+        poly._dong=dong;
+        dongPolygons.push(poly);
       });
     });
+    refreshDongVisibility();
   }catch(e){console.error('행정동 로드 실패:',e);}
 }
-function toggleDong(){showDong=!showDong;dongPolygons.forEach(p=>p.setMap(showDong?map:null));document.getElementById('dongBtn').classList.toggle('on-purple',showDong);}
+function toggleDong(){showDong=!showDong;refreshDongVisibility();document.getElementById('dongBtn').classList.toggle('on-purple',showDong);}
 drawDong();
 
 function updateCompass(h){lastHeading=h;document.getElementById('needle').setAttribute('transform',`rotate(${h},20,20)`);}
@@ -1484,6 +1674,35 @@ async function doSearch(){
   }
   alert('검색 결과가 없습니다.\n장소명이나 도로명 주소로 다시 시도해주세요.');
 }
+
+let secretTapCount=0,secretTapTimer=null;
+function secretTitleTap(){
+  secretTapCount++;
+  clearTimeout(secretTapTimer);
+  secretTapTimer=setTimeout(()=>secretTapCount=0,1200);
+  if(secretTapCount>=3){
+    secretTapCount=0;
+    const box=document.getElementById('secretPinBox');
+    box.classList.add('show');
+    setTimeout(()=>document.getElementById('secretPinInput').focus(),80);
+  }
+}
+function checkSecretPin(){
+  const input=document.getElementById('secretPinInput');
+  const msg=document.getElementById('secretPinMsg');
+  const pin=(input.value||'').trim();
+  if(pin==='1105'){
+    msg.textContent='확인되었습니다. 사진 보고 사이트로 이동합니다.';
+    msg.style.color='var(--g)';
+    setTimeout(()=>{location.href='https://tom981105-web.github.io/photo-report/';},250);
+  }else{
+    msg.textContent='PIN 번호가 맞지 않습니다.';
+    msg.style.color='var(--red)';
+    input.value='';
+    input.focus();
+  }
+}
+
 startCompass();
 </script>
 </body>
