@@ -39,6 +39,15 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .tbs{position:absolute;top:12px;right:10px;z-index:500;display:flex;flex-direction:column;gap:3px}
 .tb{padding:5px 10px;background:rgba(12,14,20,.85);backdrop-filter:blur(6px);border:1px solid var(--bd);border-radius:6px;color:var(--mu);font-size:10px;cursor:pointer;white-space:nowrap;transition:all .2s}
 .tb.on{background:var(--g);color:#fff;border-color:var(--g);font-weight:700}
+
+.dong-filter{position:absolute;top:12px;left:10px;z-index:501;width:142px;max-height:calc(100% - 24px);background:rgba(12,14,20,.88);border:1px solid var(--bd);border-radius:14px;padding:10px;backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,.25);overflow-y:auto}
+.dong-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;gap:4px}
+.dong-title span{font-size:9px;color:var(--mu);font-weight:600}
+.dong-list{display:flex;flex-direction:column;gap:4px}
+.dong-opt{width:100%;padding:6px 8px;border:1px solid var(--bd);border-radius:9px;background:rgba(255,255,255,.04);color:#cbd5e1;font-size:11px;font-weight:700;text-align:left;cursor:pointer;transition:all .15s;white-space:nowrap}
+.dong-opt.on{background:var(--g);border-color:var(--g);color:#fff;box-shadow:0 0 0 2px rgba(3,199,90,.18)}
+.dong-opt.all{color:#f59e0b}.dong-opt.all.on{color:#fff}
+@media(max-width:720px){.dong-filter{width:118px;max-height:48%;padding:8px}.dong-opt{font-size:10px;padding:5px 7px}.dong-title{font-size:10px}}
 .btns{position:absolute;bottom:14px;right:10px;z-index:500;display:flex;flex-direction:column;gap:6px;align-items:center}
 #compass{width:40px;height:40px;pointer-events:none;flex-shrink:0}
 #compass svg{width:100%;height:100%;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
@@ -145,7 +154,7 @@ input[type=range]:disabled{opacity:.4}
     <div class="help-section">
       <div class="help-section-title">🗳 투표소 찾기</div>
       <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 19곳 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
-      <div class="help-row"><div class="help-icon">🏫</div><div class="help-text"><b>주황 버튼</b> → 본투표소 0개 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">🏫</div><div class="help-text"><b>주황 버튼</b> → 본투표소 118곳 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
       <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>투표소 핀 터치</b> → 투표소명·장소·주소·시간·내위치 거리 확인</div></div>
     </div>
     <hr class="help-divider">
@@ -163,6 +172,31 @@ input[type=range]:disabled{opacity:.4}
 
 <div id="mw">
   <div id="map"></div>
+  <div class="dong-filter" id="dongFilter">
+    <div class="dong-title">🏘 동 선택 <span id="dongFilterNow">전체</span></div>
+    <div class="dong-list">
+      <button class="dong-opt all on" data-dong="전체" onclick="setDongFilter('전체')">전체</button>
+      <button class="dong-opt " data-dong="월계1동" onclick="setDongFilter('월계1동')">월계1동</button>
+      <button class="dong-opt " data-dong="월계2동" onclick="setDongFilter('월계2동')">월계2동</button>
+      <button class="dong-opt " data-dong="월계3동" onclick="setDongFilter('월계3동')">월계3동</button>
+      <button class="dong-opt " data-dong="공릉1동" onclick="setDongFilter('공릉1동')">공릉1동</button>
+      <button class="dong-opt " data-dong="공릉2동" onclick="setDongFilter('공릉2동')">공릉2동</button>
+      <button class="dong-opt " data-dong="하계1동" onclick="setDongFilter('하계1동')">하계1동</button>
+      <button class="dong-opt " data-dong="하계2동" onclick="setDongFilter('하계2동')">하계2동</button>
+      <button class="dong-opt " data-dong="중계본동" onclick="setDongFilter('중계본동')">중계본동</button>
+      <button class="dong-opt " data-dong="중계1동" onclick="setDongFilter('중계1동')">중계1동</button>
+      <button class="dong-opt " data-dong="중계2·3동" onclick="setDongFilter('중계2·3동')">중계2·3동</button>
+      <button class="dong-opt " data-dong="중계4동" onclick="setDongFilter('중계4동')">중계4동</button>
+      <button class="dong-opt " data-dong="상계1동" onclick="setDongFilter('상계1동')">상계1동</button>
+      <button class="dong-opt " data-dong="상계2동" onclick="setDongFilter('상계2동')">상계2동</button>
+      <button class="dong-opt " data-dong="상계3·4동" onclick="setDongFilter('상계3·4동')">상계3·4동</button>
+      <button class="dong-opt " data-dong="상계5동" onclick="setDongFilter('상계5동')">상계5동</button>
+      <button class="dong-opt " data-dong="상계6·7동" onclick="setDongFilter('상계6·7동')">상계6·7동</button>
+      <button class="dong-opt " data-dong="상계8동" onclick="setDongFilter('상계8동')">상계8동</button>
+      <button class="dong-opt " data-dong="상계9동" onclick="setDongFilter('상계9동')">상계9동</button>
+      <button class="dong-opt " data-dong="상계10동" onclick="setDongFilter('상계10동')">상계10동</button>
+    </div>
+  </div>
   <div class="lock-badge" id="lockBadge">🔒 반경 고정됨</div>
   <div class="track-hint" id="trackHint">📍 위치 점을 드래그해 거리 측정</div>
   <div class="tbs">
@@ -240,6 +274,27 @@ let myLat=null,myLng=null;
 let dongPolygons=[],showDong=true;
 const markers={pre:[],day:[]};
 const showing={pre:true,day:false};
+
+let selectedDong='전체';
+const NOWON_DONGS=['월계1동','월계2동','월계3동','공릉1동','공릉2동','하계1동','하계2동','중계본동','중계1동','중계2·3동','중계4동','상계1동','상계2동','상계3·4동','상계5동','상계6·7동','상계8동','상계9동','상계10동'];
+function getStationDong(s){
+  if(s.dong)return s.dong;
+  return (s.name||'').replace(/사전투표소.*/,'').trim();
+}
+function isMarkerVisible(m){
+  if(!showing[m._type])return false;
+  if(selectedDong==='전체')return true;
+  return getStationDong(m._station)===selectedDong;
+}
+function refreshMarkerVisibility(){
+  ['pre','day'].forEach(type=>markers[type].forEach(m=>m.setMap(isMarkerVisible(m)?map:null)));
+}
+function setDongFilter(dong){
+  selectedDong=dong;
+  document.getElementById('dongFilterNow').textContent=dong;
+  document.querySelectorAll('.dong-opt').forEach(b=>b.classList.toggle('on',b.dataset.dong===dong));
+  refreshMarkerVisibility();
+}
 
 function calcDist(a,b){
   const R=6371000,r=x=>x*Math.PI/180;
@@ -1252,10 +1307,12 @@ function makeVoteMarker(s,type){
     icon:{content:`<div style="background:${color};color:#fff;border:1px solid #fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:8px;box-shadow:0 1px 5px rgba(0,0,0,.5);transform:translate(-7px,-7px);cursor:pointer;">${icon}</div>`,anchor:new naver.maps.Point(0,0)},
     zIndex:isPre?31:30
   });
+  m._station=s;
+  m._type=type;
   naver.maps.Event.addListener(m,'click',()=>{
     const popup=document.getElementById('votePopup');
     popup.className=`vote-popup show ${type}`;
-    document.getElementById('vpType').textContent=isPre?'🗳 사전투표소 · 노원구':'🏫 본투표소 · 노원구';
+    document.getElementById('vpType').textContent=isPre?`🗳 사전투표소 · ${getStationDong(s)}`:`🏫 본투표소 · ${getStationDong(s)}`;
     document.getElementById('vpName').textContent=s.name;
     document.getElementById('vpBld').textContent=s.bld;
     document.getElementById('vpAddr').textContent=s.addr;
@@ -1276,15 +1333,24 @@ function makeVoteMarker(s,type){
 async function initMarkers(type){
   const data=type==='pre'?PRE:DAY;
   for(const s of data){
-    if(s.lat&&s.lng){const marker=makeVoteMarker(s,type);marker.setMap(showing[type]?map:null);markers[type].push(marker);continue;}
+    if(s.lat&&s.lng){
+      const marker=makeVoteMarker(s,type);
+      markers[type].push(marker);
+      marker.setMap(isMarkerVisible(marker)?map:null);
+      continue;
+    }
     const coord=await geocodeNaver(s.addr);
     if(!coord){console.warn('geocode 실패:',s.addr);continue;}
-    s.lat=coord.lat;s.lng=coord.lng;const marker=makeVoteMarker(s,type);marker.setMap(showing[type]?map:null);markers[type].push(marker);
+    s.lat=coord.lat;s.lng=coord.lng;
+    const marker=makeVoteMarker(s,type);
+    markers[type].push(marker);
+    marker.setMap(isMarkerVisible(marker)?map:null);
   }
+  refreshMarkerVisibility();
 }
 function toggleMarkers(type){
   showing[type]=!showing[type];
-  markers[type].forEach(m=>m.setMap(showing[type]?map:null));
+  refreshMarkerVisibility();
   document.getElementById(type==='pre'?'preBtn':'dayBtn').classList.toggle(type==='pre'?'on-blue':'on-orange',showing[type]);
 }
 initMarkers('pre');initMarkers('day');
