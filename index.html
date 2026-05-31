@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>영진반경측정기</title>
+<title>노원반경측정기</title>
 <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=rfc2alzxho&submodules=geocoder"></script>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -115,7 +115,7 @@ input[type=range]:disabled{opacity:.4}
 <header>
   <div class="brand">
     <div class="brand-all">
-      <span>영</span><span>진</span><span>반</span><span>경</span><span>측</span><span>정</span><span>기</span>
+      <span>노</span><span>원</span><span>반</span><span>경</span><span>측</span><span>정</span><span>기</span>
     </div>
   </div>
   <div class="hs">
@@ -131,7 +131,7 @@ input[type=range]:disabled{opacity:.4}
 <div class="help-modal" id="helpModal" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="help-box">
     <button class="help-close" onclick="document.getElementById('helpModal').classList.remove('show')">✕</button>
-    <div class="help-title">📱 영진반경측정기 사용법</div>
+    <div class="help-title">📱 노원반경측정기 사용법</div>
     <div class="help-section">
       <div class="help-section-title">🗺 기본 사용법</div>
       <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>지도 터치</b> → 초록 중심점 + 반경 원 표시<br><span class="sub">중심점을 드래그해서 위치를 옮길 수 있습니다</span></div></div>
@@ -391,7 +391,7 @@ async function captureMap(){
   const now=new Date();
   const ts=`${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
   const link=document.createElement('a');
-  link.download=`영진반경_${ts}.png`;
+  link.download=`노원반경_${ts}.png`;
   try{link.href=canvas.toDataURL('image/png');link.click();}
   catch(e){alert('이미지 저장에 실패했습니다. 다시 시도해주세요.');}
 }
