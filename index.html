@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>영진반경측정기</title>
-<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=1zqd3bjv3u&submodules=geocoder"></script>
+<title>노원반경측정기</title>
+<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=rfc2alzxho&submodules=geocoder"></script>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -39,6 +39,27 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .tbs{position:absolute;top:12px;right:10px;z-index:500;display:flex;flex-direction:column;gap:3px}
 .tb{padding:5px 10px;background:rgba(12,14,20,.85);backdrop-filter:blur(6px);border:1px solid var(--bd);border-radius:6px;color:var(--mu);font-size:10px;cursor:pointer;white-space:nowrap;transition:all .2s}
 .tb.on{background:var(--g);color:#fff;border-color:var(--g);font-weight:700}
+
+.dong-filter{position:absolute;top:12px;left:10px;z-index:501;width:150px;max-height:calc(100% - 24px);background:rgba(12,14,20,.88);border:1px solid var(--bd);border-radius:14px;padding:9px;backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,.25);overflow-y:auto;transition:width .18s ease,max-height .18s ease,padding .18s ease}
+.dong-filter.collapsed{width:44px;max-height:44px;padding:7px;overflow:hidden}
+.dong-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;gap:5px}
+.dong-filter.collapsed .dong-title{margin-bottom:0;justify-content:center}
+.dong-main-title{flex:1;background:none;border:none;color:#fff;font-size:11px;font-weight:900;text-align:left;cursor:pointer;display:flex;align-items:center;gap:4px;min-width:0}
+.dong-now{font-size:9px;color:var(--mu);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56px}
+.dong-collapse-btn{width:25px;height:24px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(255,255,255,.05);color:#cbd5e1;font-size:10px;font-weight:900;cursor:pointer;flex-shrink:0}
+.dong-filter.collapsed .dong-main-title .dong-label,.dong-filter.collapsed .dong-now,.dong-filter.collapsed .dong-collapse-btn,.dong-filter.collapsed .dong-list{display:none}
+.dong-list{display:flex;flex-direction:column;gap:5px}
+.dong-group-btn{width:100%;margin-top:4px;padding:6px 8px;border:1px solid rgba(245,158,11,.18);border-radius:9px;background:rgba(245,158,11,.08);color:#f59e0b;font-size:10px;font-weight:900;letter-spacing:.2px;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .15s;white-space:nowrap}
+.dong-group-btn.on{background:#f59e0b;color:#111;border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.18)}
+.dong-group-btn.partial{border-color:#f59e0b;background:rgba(245,158,11,.16);color:#ffd166}
+.dong-group-btn .arr{font-size:9px;opacity:.85;transition:transform .15s}
+.dong-group-btn.open .arr{transform:rotate(180deg)}
+.dong-sub{display:none;flex-direction:column;gap:4px;margin:4px 0 3px 7px;padding-left:6px;border-left:1px solid rgba(255,255,255,.10)}
+.dong-sub.open{display:flex}
+.dong-opt{width:100%;padding:6px 8px;border:1px solid var(--bd);border-radius:9px;background:rgba(255,255,255,.04);color:#cbd5e1;font-size:11px;font-weight:700;text-align:left;cursor:pointer;transition:all .15s;white-space:nowrap}
+.dong-opt.on{background:var(--g);border-color:var(--g);color:#fff;box-shadow:0 0 0 2px rgba(3,199,90,.18)}
+.dong-opt.all{color:#f59e0b}.dong-opt.all.on{color:#fff}
+@media(max-width:720px){.dong-filter{width:132px;max-height:48%;padding:8px}.dong-filter.collapsed{width:42px;max-height:42px;padding:7px}.dong-opt{font-size:10px;padding:5px 7px}.dong-main-title{font-size:10px}.dong-group-btn{font-size:9px;padding:5px 7px}.dong-now{max-width:45px}}
 .btns{position:absolute;bottom:14px;right:10px;z-index:500;display:flex;flex-direction:column;gap:6px;align-items:center}
 #compass{width:40px;height:40px;pointer-events:none;flex-shrink:0}
 #compass svg{width:100%;height:100%;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
@@ -48,6 +69,7 @@ header{height:52px;background:var(--g);display:flex;align-items:center;padding:0
 .ib.on-purple{background:#a855f7;color:#fff;border-color:#a855f7}
 .ib.on-blue{background:#2563eb;color:#fff;border-color:#2563eb}
 .ib.on-red{background:#ff4757;color:#fff;border-color:#ff4757}
+.ib.on-orange{background:#ff4757;color:#fff;border-color:#ff4757;font-weight:700}
 .vote-popup{position:absolute;bottom:14px;left:10px;z-index:600;background:rgba(15,17,23,0.95);border-radius:12px;padding:10px 14px;max-width:240px;display:none;backdrop-filter:blur(10px)}
 .vote-popup.show{display:block}
 .vote-popup.pre{border:1px solid #2563eb}
@@ -105,7 +127,7 @@ input[type=range]:disabled{opacity:.4}
 <header>
   <div class="brand">
     <div class="brand-all">
-      <span>영</span><span>진</span><span>반</span><span>경</span><span>측</span><span>정</span><span>기</span>
+      <span>노</span><span>원</span><span>반</span><span>경</span><span>측</span><span>정</span><span>기</span>
     </div>
   </div>
   <div class="hs">
@@ -121,7 +143,7 @@ input[type=range]:disabled{opacity:.4}
 <div class="help-modal" id="helpModal" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="help-box">
     <button class="help-close" onclick="document.getElementById('helpModal').classList.remove('show')">✕</button>
-    <div class="help-title">📱 영진반경측정기 사용법</div>
+    <div class="help-title">📱 노원반경측정기 사용법</div>
     <div class="help-section">
       <div class="help-section-title">🗺 기본 사용법</div>
       <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>지도 터치</b> → 초록 중심점 + 반경 원 표시<br><span class="sub">중심점을 드래그해서 위치를 옮길 수 있습니다</span></div></div>
@@ -143,14 +165,14 @@ input[type=range]:disabled{opacity:.4}
     <hr class="help-divider">
     <div class="help-section">
       <div class="help-section-title">🗳 투표소 찾기</div>
-      <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 12개 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
-      <div class="help-row"><div class="help-icon">📍</div><div class="help-text"><b>빨간 버튼</b> → 선거일투표소 57개 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
-      <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>투표소 핀 터치</b> → 투표소명·주소·시간·내위치 거리 확인</div></div>
+      <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 19곳 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">🏫</div><div class="help-text"><b>빨간 버튼</b> → 본투표소 118곳 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>투표소 핀 터치</b> → 투표소명·장소·주소·시간·내위치 거리 확인</div></div>
     </div>
     <hr class="help-divider">
     <div class="help-section">
       <div class="help-section-title">🔧 기타 기능</div>
-      <div class="help-row"><div class="help-icon">🏘</div><div class="help-text"><b>행정동 버튼</b> → 연제구 12개 행정동 경계 표시/숨기기</div></div>
+      <div class="help-row"><div class="help-icon">🏘</div><div class="help-text"><b>행정동 버튼</b> → 노원구 행정동 경계 표시/숨기기</div></div>
       <div class="help-row"><div class="help-icon">🔓</div><div class="help-text"><b>자물쇠 버튼</b> → 반경 고정</div></div>
       <div class="help-row"><div class="help-icon">🗺</div><div class="help-text"><b>지도 종류</b> → 일반·위성·지형·혼합 선택</div></div>
       <div class="help-row"><div class="help-icon">🔍</div><div class="help-text"><b>주소·장소 검색</b> → 아파트명·학교·기관명 등 장소명으로도 검색 가능</div></div>
@@ -162,6 +184,54 @@ input[type=range]:disabled{opacity:.4}
 
 <div id="mw">
   <div id="map"></div>
+  <div class="dong-filter" id="dongFilter">
+    <div class="dong-title">
+      <button class="dong-main-title" onclick="toggleDongPanel()"><span>🏘</span><span class="dong-label">동 선택</span> <span class="dong-now" id="dongFilterNow">전체</span></button>
+      <button class="dong-collapse-btn" onclick="toggleDongPanel()" title="동 선택 접기/펼치기">접기</button>
+    </div>
+    <div class="dong-list">
+      <button class="dong-opt all on" data-dong="전체" onclick="selectAllDong()">전체</button>
+
+      <button class="dong-group-btn" data-dong="월계동" data-group="월계동" onclick="selectDongGroup('월계동')"><span>월계동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="월계동">
+        <button class="dong-opt" data-dong="월계1동" onclick="selectSubDong('월계1동')">월계1동</button>
+        <button class="dong-opt" data-dong="월계2동" onclick="selectSubDong('월계2동')">월계2동</button>
+        <button class="dong-opt" data-dong="월계3동" onclick="selectSubDong('월계3동')">월계3동</button>
+      </div>
+
+      <button class="dong-group-btn" data-dong="공릉동" data-group="공릉동" onclick="selectDongGroup('공릉동')"><span>공릉동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="공릉동">
+        <button class="dong-opt" data-dong="공릉1동" onclick="selectSubDong('공릉1동')">공릉1동</button>
+        <button class="dong-opt" data-dong="공릉2동" onclick="selectSubDong('공릉2동')">공릉2동</button>
+      </div>
+
+      <button class="dong-group-btn" data-dong="하계동" data-group="하계동" onclick="selectDongGroup('하계동')"><span>하계동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="하계동">
+        <button class="dong-opt" data-dong="하계1동" onclick="selectSubDong('하계1동')">하계1동</button>
+        <button class="dong-opt" data-dong="하계2동" onclick="selectSubDong('하계2동')">하계2동</button>
+      </div>
+
+      <button class="dong-group-btn" data-dong="중계동" data-group="중계동" onclick="selectDongGroup('중계동')"><span>중계동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="중계동">
+        <button class="dong-opt" data-dong="중계본동" onclick="selectSubDong('중계본동')">중계본동</button>
+        <button class="dong-opt" data-dong="중계1동" onclick="selectSubDong('중계1동')">중계1동</button>
+        <button class="dong-opt" data-dong="중계2·3동" onclick="selectSubDong('중계2·3동')">중계2·3동</button>
+        <button class="dong-opt" data-dong="중계4동" onclick="selectSubDong('중계4동')">중계4동</button>
+      </div>
+
+      <button class="dong-group-btn" data-dong="상계동" data-group="상계동" onclick="selectDongGroup('상계동')"><span>상계동</span><span class="arr">▾</span></button>
+      <div class="dong-sub" data-group="상계동">
+        <button class="dong-opt" data-dong="상계1동" onclick="selectSubDong('상계1동')">상계1동</button>
+        <button class="dong-opt" data-dong="상계2동" onclick="selectSubDong('상계2동')">상계2동</button>
+        <button class="dong-opt" data-dong="상계3·4동" onclick="selectSubDong('상계3·4동')">상계3·4동</button>
+        <button class="dong-opt" data-dong="상계5동" onclick="selectSubDong('상계5동')">상계5동</button>
+        <button class="dong-opt" data-dong="상계6·7동" onclick="selectSubDong('상계6·7동')">상계6·7동</button>
+        <button class="dong-opt" data-dong="상계8동" onclick="selectSubDong('상계8동')">상계8동</button>
+        <button class="dong-opt" data-dong="상계9동" onclick="selectSubDong('상계9동')">상계9동</button>
+        <button class="dong-opt" data-dong="상계10동" onclick="selectSubDong('상계10동')">상계10동</button>
+      </div>
+    </div>
+  </div>
   <div class="lock-badge" id="lockBadge">🔒 반경 고정됨</div>
   <div class="track-hint" id="trackHint">📍 위치 점을 드래그해 거리 측정</div>
   <div class="tbs">
@@ -189,8 +259,8 @@ input[type=range]:disabled{opacity:.4}
       </svg>
     </div>
     <button class="ib on-purple" id="dongBtn" onclick="toggleDong()">🏘</button>
-    <button class="ib on-blue" id="preBtn" onclick="toggleMarkers('pre')">🗳</button>
-    <button class="ib on-red" id="dayBtn" onclick="toggleMarkers('day')">📍</button>
+    <button class="ib" id="preBtn" onclick="toggleMarkers('pre')">🗳</button>
+    <button class="ib on-orange" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">🏫</button>
     <button class="ib" id="lockBtn" onclick="toggleLock()">🔓</button>
     <button class="ib" id="trackBtn" onclick="toggleTracking()">◎</button>
     <button class="ib" onclick="locateOnce()">⊕</button>
@@ -226,7 +296,7 @@ input[type=range]:disabled{opacity:.4}
 
 <script>
 const map=new naver.maps.Map('map',{
-  center:new naver.maps.LatLng(35.1796,129.0756),
+  center:new naver.maps.LatLng(37.6542,127.0568),
   zoom:14,mapTypeId:naver.maps.MapTypeId.NORMAL,
   scaleControl:false,tilting:true,rotating:true
 });
@@ -236,9 +306,145 @@ let myDot=null,myAcc=null;
 let myLine=null,myLineLbl=null;
 let rM=500,watchId=null,isTracking=false,isLocked=false,lastHeading=0;
 let myLat=null,myLng=null;
-let dongPolygons=[],showDong=true;
+let dongPolygons=[],showDong=true,dongBounds={};
 const markers={pre:[],day:[]};
-const showing={pre:true,day:true};
+const showing={pre:false,day:true};
+
+let selectedDongSet=null; // null이면 전체 선택, Set이면 중복 선택 목록
+const NOWON_DONGS=['월계1동','월계2동','월계3동','공릉1동','공릉2동','하계1동','하계2동','중계본동','중계1동','중계2·3동','중계4동','상계1동','상계2동','상계3·4동','상계5동','상계6·7동','상계8동','상계9동','상계10동'];
+const DONG_GROUPS={
+  '월계동':['월계1동','월계2동','월계3동'],
+  '공릉동':['공릉1동','공릉2동'],
+  '하계동':['하계1동','하계2동'],
+  '중계동':['중계본동','중계1동','중계2·3동','중계4동'],
+  '상계동':['상계1동','상계2동','상계3·4동','상계5동','상계6·7동','상계8동','상계9동','상계10동']
+};
+const DONG_PARENT=Object.fromEntries(Object.entries(DONG_GROUPS).flatMap(([g,ds])=>ds.map(d=>[d,g])));
+function getStationDong(s){
+  if(s.dong)return s.dong;
+  return (s.name||'').replace(/사전투표소.*/,'').trim();
+}
+function getSelectedDongs(){
+  return selectedDongSet===null?NOWON_DONGS:[...selectedDongSet];
+}
+function isDongSelected(dong){
+  return selectedDongSet===null || selectedDongSet.has(dong);
+}
+function isMarkerVisible(m){
+  if(!showing[m._type])return false;
+  return isDongSelected(getStationDong(m._station));
+}
+function refreshMarkerVisibility(){
+  ['pre','day'].forEach(type=>markers[type].forEach(m=>m.setMap(isMarkerVisible(m)?map:null)));
+}
+function getFeatureDong(props){
+  const txt=[props.adm_nm,props.ADM_NM,props.adm_cd2,props.SGG_NM,props.sigungu,props.SIG_KOR_NM].filter(Boolean).join(' ');
+  return NOWON_DONGS.find(d=>txt.includes(d))||'';
+}
+function refreshDongVisibility(){
+  dongPolygons.forEach(p=>{
+    const visible=showDong&&isDongSelected(p._dong);
+    p.setMap(visible?map:null);
+  });
+}
+function mergeBounds(dongs){
+  let merged=null;
+  dongs.forEach(d=>{
+    const b=dongBounds[d];
+    if(!b)return;
+    if(!merged)merged={...b};
+    else{
+      merged.minLat=Math.min(merged.minLat,b.minLat);merged.maxLat=Math.max(merged.maxLat,b.maxLat);
+      merged.minLng=Math.min(merged.minLng,b.minLng);merged.maxLng=Math.max(merged.maxLng,b.maxLng);
+    }
+  });
+  return merged;
+}
+function fitToSelectedDong(){
+  if(selectedDongSet===null)return;
+  const b=mergeBounds(getSelectedDongs());
+  if(!b)return;
+  const bounds=new naver.maps.LatLngBounds(new naver.maps.LatLng(b.minLat,b.minLng),new naver.maps.LatLng(b.maxLat,b.maxLng));
+  map.fitBounds(bounds);
+}
+function openDongGroup(group,open=true){
+  document.querySelectorAll(`.dong-sub[data-group="${group}"]`).forEach(el=>el.classList.toggle('open',open));
+  document.querySelectorAll(`.dong-group-btn[data-group="${group}"]`).forEach(el=>el.classList.toggle('open',open));
+}
+function closeAllDongGroups(){
+  document.querySelectorAll('.dong-sub').forEach(el=>el.classList.remove('open'));
+  document.querySelectorAll('.dong-group-btn').forEach(el=>el.classList.remove('open'));
+}
+function toggleDongPanel(){
+  document.getElementById('dongFilter').classList.toggle('collapsed');
+}
+function getDongFilterLabel(){
+  if(selectedDongSet===null)return '전체';
+  const selected=[...selectedDongSet];
+  if(selected.length===0)return '전체';
+  for(const [group,dongs] of Object.entries(DONG_GROUPS)){
+    if(selected.length===dongs.length && dongs.every(d=>selectedDongSet.has(d)))return group;
+  }
+  return selected.length===1?selected[0]:`${selected.length}개 선택`;
+}
+function refreshDongButtonState(){
+  const isAll=selectedDongSet===null;
+  document.getElementById('dongFilterNow').textContent=getDongFilterLabel();
+  document.querySelectorAll('.dong-opt.all').forEach(b=>b.classList.toggle('on',isAll));
+  document.querySelectorAll('.dong-opt:not(.all)').forEach(b=>{
+    const dong=b.dataset.dong;
+    b.classList.toggle('on',!isAll&&selectedDongSet.has(dong));
+  });
+  document.querySelectorAll('.dong-group-btn').forEach(b=>{
+    const group=b.dataset.group;
+    const dongs=DONG_GROUPS[group]||[];
+    const count=isAll?0:dongs.filter(d=>selectedDongSet.has(d)).length;
+    b.classList.toggle('on',!isAll&&count===dongs.length&&count>0);
+    b.classList.toggle('partial',!isAll&&count>0&&count<dongs.length);
+  });
+}
+function applyDongFilter(){
+  refreshDongButtonState();
+  refreshMarkerVisibility();
+  refreshDongVisibility();
+  fitToSelectedDong();
+}
+function selectAllDong(){
+  selectedDongSet=null;
+  closeAllDongGroups();
+  applyDongFilter();
+}
+function ensureSelectionSet(){
+  if(selectedDongSet===null)selectedDongSet=new Set();
+}
+function normalizeSelection(){
+  if(!selectedDongSet || selectedDongSet.size===0)selectedDongSet=null;
+}
+function selectDongGroup(group){
+  const dongs=DONG_GROUPS[group]||[];
+  const currentlyAll=selectedDongSet!==null&&dongs.every(d=>selectedDongSet.has(d));
+  ensureSelectionSet();
+  if(currentlyAll)dongs.forEach(d=>selectedDongSet.delete(d));
+  else dongs.forEach(d=>selectedDongSet.add(d));
+  normalizeSelection();
+  // 대분류를 누르면 해당 묶음을 선택/해제한 뒤 자동으로 접어서 화면을 덜 가리게 함
+  openDongGroup(group,false);
+  applyDongFilter();
+}
+function selectSubDong(dong){
+  const group=DONG_PARENT[dong];
+  ensureSelectionSet();
+  if(selectedDongSet.has(dong))selectedDongSet.delete(dong);
+  else selectedDongSet.add(dong);
+  normalizeSelection();
+  // 소분류를 하나씩 골랐을 때 해당 대분류가 모두 선택되거나 전부 해제되면 자동 접기
+  if(group){
+    const dongs=DONG_GROUPS[group]||[];
+    const selectedCount=selectedDongSet===null?0:dongs.filter(d=>selectedDongSet.has(d)).length;
+    openDongGroup(group,selectedCount>0&&selectedCount<dongs.length);
+  }
+  applyDongFilter();
+}
 
 function calcDist(a,b){
   const R=6371000,r=x=>x*Math.PI/180;
@@ -335,7 +541,7 @@ async function captureMap(){
   const now=new Date();
   const ts=`${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
   const link=document.createElement('a');
-  link.download=`영진반경_${ts}.png`;
+  link.download=`노원반경_${ts}.png`;
   try{link.href=canvas.toDataURL('image/png');link.click();}
   catch(e){alert('이미지 저장에 실패했습니다. 다시 시도해주세요.');}
 }
@@ -373,79 +579,854 @@ function makeMyDotContent(heading){
 }
 
 const PRE=[
-  {name:'거제제1동사전투표소',bld:'거제1동행정복지센터 3층 다목적실',addr:'부산광역시 연제구 법원북로 88'},
-  {name:'거제제2동사전투표소',bld:'거제2동행정복지센터 3층 다목적홀',addr:'부산광역시 연제구 아시아드대로22번길 19'},
-  {name:'거제제3동사전투표소',bld:'거제3동행정복지센터 1층 평생학습실',addr:'부산광역시 연제구 거제대로 180'},
-  {name:'거제제4동사전투표소',bld:'거제4동행정복지센터 4층 다목적강당',addr:'부산광역시 연제구 화지로52번길 33'},
-  {name:'연산제1동사전투표소',bld:'연산1동행정복지센터 3층 대회의실',addr:'부산광역시 연제구 연동로8번길 66'},
-  {name:'연산제2동사전투표소',bld:'연제구청 2층 대회의실',addr:'부산광역시 연제구 연제로 2'},
-  {name:'연산제3동사전투표소',bld:'연산3동행정복지센터 4층 대회의실',addr:'부산광역시 연제구 연수로208번길 16'},
-  {name:'연산제4동사전투표소',bld:'연산로터리새마을금고 4층 대강당',addr:'부산광역시 연제구 쌍미천로141번길 22'},
-  {name:'연산제5동사전투표소',bld:'연산5동행정복지센터 2층 평생학습실',addr:'부산광역시 연제구 거제천로124번길 15'},
-  {name:'연산제6동사전투표소',bld:'연산6동행정복지센터 4층 프로그램실',addr:'부산광역시 연제구 쌍미천로52번길 2'},
-  {name:'연산제8동사전투표소',bld:'연산8동행정복지센터 3층 프로그램실',addr:'부산광역시 연제구 과정로 262 302호'},
-  {name:'연산제9동사전투표소',bld:'연산9동행정복지센터 3층 대회의실',addr:'부산광역시 연제구 과정로164번길 38'},
+  {name:'월계1동사전투표소',bld:'월계1동주민센터 2층 다목적실',addr:'서울특별시 노원구 월계로 59'},
+  {name:'월계2동사전투표소',bld:'월계2동주민센터 3층 다목적실',addr:'서울특별시 노원구 초안산로5길 28'},
+  {name:'월계3동사전투표소',bld:'월계보건지소 4층 프로그램교육실',addr:'서울특별시 노원구 월계로 378'},
+  {name:'공릉1동사전투표소',bld:'공릉1동주민센터 3층 다목적실',addr:'서울특별시 노원구 동일로186길 3-24'},
+  {name:'공릉2동사전투표소',bld:'공릉2동주민센터 3층 다목적실',addr:'서울특별시 노원구 노원로1길 68'},
+  {name:'하계1동사전투표소',bld:'하계1동주민센터 2층 다목적실',addr:'서울특별시 노원구 노원로 261'},
+  {name:'하계2동사전투표소',bld:'하계중학교 1층 꿈자람터',addr:'서울특별시 노원구 섬밭로 181'},
+  {name:'중계본동사전투표소',bld:'불암도서관 지하1층 플랫폼B',addr:'서울특별시 노원구 중계로 106'},
+  {name:'중계1동사전투표소',bld:'청암중학교 1층 유치원',addr:'서울특별시 노원구 중계로 244'},
+  {name:'중계2·3동사전투표소',bld:'중계2·3동주민센터 3층 소강당',addr:'서울특별시 노원구 노원로17길 56'},
+  {name:'중계4동사전투표소',bld:'중계종합사회복지관 지하1층 강당',addr:'서울특별시 노원구 덕릉로 662'},
+  {name:'상계1동사전투표소',bld:'상계1동주민센터 2층 다목적실',addr:'서울특별시 노원구 동일로 1697'},
+  {name:'상계2동사전투표소',bld:'상계2동주민센터 4층 대강당',addr:'서울특별시 노원구 노원로 118'},
+  {name:'상계3·4동사전투표소',bld:'상계3·4동주민센터 2층 다용도실',addr:'서울특별시 노원구 덕릉로 859'},
+  {name:'상계5동사전투표소',bld:'상계5동주민센터 3층 강당',addr:'서울특별시 노원구 한글비석로 434'},
+  {name:'상계6·7동사전투표소',bld:'노원구청 2층 대강당',addr:'서울특별시 노원구 노해로 437'},
+  {name:'상계8동사전투표소',bld:'상계8동주민센터 지하1층 탁구장',addr:'서울특별시 노원구 동일로227길 97'},
+  {name:'상계9동사전투표소',bld:'상계9동주민센터 2층 다용도방',addr:'서울특별시 노원구 한글비석로 487'},
+  {name:'상계10동사전투표소',bld:'상계10동주민센터 1층 다목적실',addr:'서울특별시 노원구 노원로 530'},
 ];
 
 const DAY=[
-  {name:'거제제1동제1투',bld:'연제구 보훈회관 3층 다목적홀',addr:'부산광역시 연제구 명륜로2번길 9'},
-  {name:'거제제1동제2투',bld:'동래세무서 별관 1층 로비',addr:'부산광역시 연제구 거제천로269번길 16'},
-  {name:'거제제1동제3투',bld:'거학초등학교 1층 서편 현관',addr:'부산광역시 연제구 교대로24번길 36'},
-  {name:'거제제1동제4투',bld:'부산연제우체국 1층 홍보관',addr:'부산광역시 연제구 법원북로 33'},
-  {name:'거제제1동제5투',bld:'남문초등학교 1층 1-3반',addr:'부산광역시 연제구 법원북로 23'},
-  {name:'거제제1동제6투',bld:'거제1동행정복지센터 3층 다목적실',addr:'부산광역시 연제구 법원북로 88'},
-  {name:'거제제1동제7투',bld:'거제동월드메르디앙아파트 108동 지하1층',addr:'부산광역시 연제구 거제천로 233'},
-  {name:'거제제2동제1투',bld:'거제2동행정복지센터 3층 다목적홀',addr:'부산광역시 연제구 아시아드대로22번길 19'},
-  {name:'거제제2동제2투',bld:'창신초등학교 1층 현관로비',addr:'부산광역시 연제구 종합운동장로12번길 15'},
-  {name:'거제제2동제3투',bld:'거제종합사회복지관 3층 세미나실',addr:'부산광역시 연제구 아시아드대로46번길 45'},
-  {name:'거제제2동제4투',bld:'거제여자중학교 1층 정문로비',addr:'부산광역시 연제구 금용로 43'},
-  {name:'거제제2동제5투',bld:'레이카운티아파트 1단지 커뮤니티센터 P1층 입주민카페',addr:'부산광역시 연제구 아시아드대로 39',lat:35.18871,lng:129.06445},
-  {name:'거제제2동제6투',bld:'레이카운티아파트 2단지 커뮤니티센터 2층 입주민카페',addr:'부산광역시 연제구 아시아드대로 39',lat:35.18883,lng:129.06660},
-  {name:'거제제3동제1투',bld:'연제구 육아종합지원센터 4층 다목적강당',addr:'부산광역시 연제구 거제대로124번길 22'},
-  {name:'거제제3동제2투',bld:'거제3동행정복지센터 1층 평생학습실',addr:'부산광역시 연제구 거제대로 180'},
-  {name:'거제제3동제3투',bld:'나라키움 부산통합청사 2층 대강당',addr:'부산광역시 연제구 거제대로 222'},
-  {name:'거제제4동제1투',bld:'거제4동행정복지센터 4층 다목적강당',addr:'부산광역시 연제구 화지로52번길 33'},
-  {name:'거제제4동제2투',bld:'거성중학교 1층 학부모회실',addr:'부산광역시 연제구 해맞이로109번길 61'},
-  {name:'거제제4동제3투',bld:'거제건강생활지원센터 3층 다목적실',addr:'부산광역시 연제구 해맞이로 53'},
-  {name:'연산제1동제1투',bld:'연산1동행정복지센터 3층 대회의실',addr:'부산광역시 연제구 연동로8번길 66'},
-  {name:'연산제1동제2투',bld:'연서초등학교 1층 강당',addr:'부산광역시 연제구 거제천로270번길 30'},
-  {name:'연산제1동제3투',bld:'연산중학교 1층 학부모실',addr:'부산광역시 연제구 고분로56번길 39'},
-  {name:'연산제1동제4투',bld:'연산자이아파트 1층 입주자대표회의실',addr:'부산광역시 연제구 과정로343번길 43'},
-  {name:'연산제2동제1투',bld:'연산2동행정복지센터 2층 다목적강당',addr:'부산광역시 연제구 연제로42번길 46'},
-  {name:'연산제2동제2투',bld:'시청역비스타동원아파트 지하1층 작은도서관',addr:'부산광역시 연제구 연제로 30'},
-  {name:'연산제2동제3투',bld:'연제구청 2층 대회의실',addr:'부산광역시 연제구 연제로 2'},
-  {name:'연산제2동제4투',bld:'연제도서관 지하1층 다목적홀',addr:'부산광역시 연제구 황령산로 612'},
-  {name:'연산제2동제5투',bld:'연제롯데캐슬데시앙 커뮤니티센터',addr:'부산광역시 연제구 월드컵대로 55'},
-  {name:'연산제3동제1투',bld:'섬강스위트빌 1층 주차장',addr:'부산광역시 연제구 금련로 27'},
-  {name:'연산제3동제2투',bld:'연산3동행정복지센터 4층 대회의실',addr:'부산광역시 연제구 연수로208번길 16'},
-  {name:'연산제3동제3투',bld:'연산종합사회복지관 지하1층 경로식당',addr:'부산광역시 연제구 봉수로 17'},
-  {name:'연산제4동제1투',bld:'부산광역시 노인종합복지관 1층 로비',addr:'부산광역시 연제구 거제천로230번길 18'},
-  {name:'연산제4동제2투',bld:'연산4동행정복지센터 1층 민원실',addr:'부산광역시 연제구 쌍미천로151번길 42'},
-  {name:'연산제4동제3투',bld:'연산로터리새마을금고 4층 대강당',addr:'부산광역시 연제구 쌍미천로141번길 22'},
-  {name:'연산제4동제4투',bld:'한일태권도 1층 태권도장',addr:'부산광역시 연제구 쌍미천로 106'},
-  {name:'연산제4동제5투',bld:'연산SK뷰아파트 1단지 101동 1층 노인정',addr:'부산광역시 연제구 중앙대로1124번길 15'},
-  {name:'연산제5동제1투',bld:'연산5동행정복지센터 1층 민원실',addr:'부산광역시 연제구 거제천로124번길 15'},
-  {name:'연산제5동제2투',bld:'연제초등학교 1층 1-3반',addr:'부산광역시 연제구 중앙대로1065번길 14'},
-  {name:'연산제5동제3투',bld:'도시철도 연산역 지하1층 대합실',addr:'부산광역시 연제구 중앙대로 1101'},
-  {name:'연산제5동제4투',bld:'부산광역시청 1층 대회의실',addr:'부산광역시 연제구 중앙대로 1001'},
-  {name:'연산제6동제1투',bld:'(구)새화랑체육관 1층',addr:'부산광역시 연제구 대리로6번길 115-1'},
-  {name:'연산제6동제2투',bld:'부산연산동우체국 1층 주차장',addr:'부산광역시 연제구 연수로 197'},
-  {name:'연산제6동제3투',bld:'연산6동행정복지센터 4층 프로그램실',addr:'부산광역시 연제구 쌍미천로52번길 2'},
-  {name:'연산제6동제4투',bld:'송원빌라 1층 주차장',addr:'부산광역시 연제구 연수로148번길 91'},
-  {name:'연산제6동제5투',bld:'연산더샵아파트 2층 스터디룸',addr:'부산광역시 연제구 연수로 130'},
-  {name:'연산제8동제1투',bld:'연천초등학교 본관 1층 어울림터',addr:'부산광역시 연제구 과정로225번길 46'},
-  {name:'연산제8동제2투',bld:'연일초등학교 1층 강당',addr:'부산광역시 연제구 고분로 126-4'},
-  {name:'연산제8동제3투',bld:'연산8동경로회관 1층',addr:'부산광역시 연제구 안연로7번가길 21'},
-  {name:'연산제8동제4투',bld:'더샵파크시티아파트 104동 1층 작은도서관',addr:'부산광역시 연제구 안연로 33'},
-  {name:'연산제9동제1투',bld:'한양아파트 경로당 1층',addr:'부산광역시 연제구 온천천남로 110'},
-  {name:'연산제9동제2투',bld:'부산광역시립연산도서관 1층 문화강좌실',addr:'부산광역시 연제구 고분로191번길 16'},
-  {name:'연산제9동제3투',bld:'연제구노인복지관 3층 대강당',addr:'부산광역시 연제구 고분로 188'},
-  {name:'연산제9동제4투',bld:'부산지방국세청 별관 1층 로비',addr:'부산광역시 연제구 토곡로 20'},
-  {name:'연산제9동제5투',bld:'연산9동행정복지센터 3층 대회의실',addr:'부산광역시 연제구 과정로164번길 38'},
-  {name:'연산제9동제6투',bld:'토현중학교 1층 미술실 복도',addr:'부산광역시 연제구 토현로 47'},
-  {name:'연산제9동제7투',bld:'망미주공아파트 1층 경로당',addr:'부산광역시 연제구 토현로 10'},
-  {name:'연산제9동제8투',bld:'선경아파트 103동 1층 주차장',addr:'부산광역시 연제구 과정로 74'},
-  {name:'연산제9동제9투',bld:'센텀수영강푸르지오 1층 경로당',addr:'부산광역시 연제구 고분로 270'},
+  {
+    "name": "월계1동 제1투",
+    "bld": "월계1동주민센터 2층 다목적방",
+    "addr": "서울특별시 노원구 석계로 59",
+    "dong": "월계1동",
+    "no": 1
+  },
+  {
+    "name": "월계1동 제2투",
+    "bld": "현대아파트 관리동 1층 경로당",
+    "addr": "서울특별시 노원구 석계로 49",
+    "dong": "월계1동",
+    "no": 2
+  },
+  {
+    "name": "월계1동 제3투",
+    "bld": "선곡초등학교 본관 2층 늘봄2실",
+    "addr": "서울특별시 노원구 광운로2길 1",
+    "dong": "월계1동",
+    "no": 3
+  },
+  {
+    "name": "월계1동 제4투",
+    "bld": "인덕창업팩토리 1층 강당",
+    "addr": "서울특별시 노원구 석계로 91",
+    "dong": "월계1동",
+    "no": 4
+  },
+  {
+    "name": "월계1동 제5투",
+    "bld": "광운인공지능고등학교 근면관 1층 현관",
+    "addr": "서울특별시 노원구 광운로1길 24",
+    "dong": "월계1동",
+    "no": 5
+  },
+  {
+    "name": "월계2동 제1투",
+    "bld": "월계2동주민센터 3층 다목적방",
+    "addr": "서울특별시 노원구 초안산로5길 28",
+    "dong": "월계2동",
+    "no": 6
+  },
+  {
+    "name": "월계2동 제2투",
+    "bld": "월계중학교 1층 기술실",
+    "addr": "서울특별시 노원구 월계로45가길 54",
+    "dong": "월계2동",
+    "no": 7
+  },
+  {
+    "name": "월계2동 제3투",
+    "bld": "월계초등학교 2층 체육관",
+    "addr": "서울특별시 노원구 월계로45가길 10",
+    "dong": "월계2동",
+    "no": 8
+  },
+  {
+    "name": "월계2동 제4투",
+    "bld": "신창중학교 1층 도서관",
+    "addr": "서울특별시 노원구 월계로45길 92",
+    "dong": "월계2동",
+    "no": 9
+  },
+  {
+    "name": "월계2동 제5투",
+    "bld": "월계종합사회복지관 1층 식당",
+    "addr": "서울특별시 노원구 초안산로1길 51",
+    "dong": "월계2동",
+    "no": 10
+  },
+  {
+    "name": "월계2동 제6투",
+    "bld": "인덕대학교 덕관 2층 211호",
+    "addr": "서울특별시 노원구 초안산로 12",
+    "dong": "월계2동",
+    "no": 11
+  },
+  {
+    "name": "월계3동 제1투",
+    "bld": "미성경로당 1층",
+    "addr": "서울특별시 노원구 마들로 59",
+    "dong": "월계3동",
+    "no": 12
+  },
+  {
+    "name": "월계3동 제2투",
+    "bld": "이박사삼호체육관 1층",
+    "addr": "서울특별시 노원구 마들로 111",
+    "dong": "월계3동",
+    "no": 13
+  },
+  {
+    "name": "월계3동 제3투",
+    "bld": "한내행복발전소 3층 다목적실",
+    "addr": "서울특별시 노원구 마들로3길 13",
+    "dong": "월계3동",
+    "no": 14
+  },
+  {
+    "name": "월계3동 제4투",
+    "bld": "녹천초등학교 1층 녹천관 로비",
+    "addr": "서울특별시 노원구 마들로3길 34",
+    "dong": "월계3동",
+    "no": 15
+  },
+  {
+    "name": "월계3동 제5투",
+    "bld": "그랑빌경로당 1층 할아버지방",
+    "addr": "서울특별시 노원구 마들로 31",
+    "dong": "월계3동",
+    "no": 16
+  },
+  {
+    "name": "월계3동 제6투",
+    "bld": "한천초등학교 1층 다모임실",
+    "addr": "서울특별시 노원구 마들로 45",
+    "dong": "월계3동",
+    "no": 17
+  },
+  {
+    "name": "월계3동 제7투",
+    "bld": "그랑빌경로당 1층 할머니방",
+    "addr": "서울특별시 노원구 마들로 31",
+    "dong": "월계3동",
+    "no": 18
+  },
+  {
+    "name": "월계3동 제8투",
+    "bld": "사슴2단지경로당 1층",
+    "addr": "서울특별시 노원구 월계로55길 16",
+    "dong": "월계3동",
+    "no": 19
+  },
+  {
+    "name": "월계3동 제9투",
+    "bld": "녹천중학교 본관 1층 중앙현관로비",
+    "addr": "서울특별시 노원구 월계로 376",
+    "dong": "월계3동",
+    "no": 20
+  },
+  {
+    "name": "공릉1동 제1투",
+    "bld": "노원프레미어스엠코 지하1층 공릉평생교육원",
+    "addr": "서울특별시 노원구 동일로 986",
+    "dong": "공릉1동",
+    "no": 21
+  },
+  {
+    "name": "공릉1동 제2투",
+    "bld": "공릉초등학교 도담관 2층 체육관",
+    "addr": "서울특별시 노원구 동일로173길 12",
+    "dong": "공릉1동",
+    "no": 22
+  },
+  {
+    "name": "공릉1동 제3투",
+    "bld": "공릉1동주민센터 3층 다목적방",
+    "addr": "서울특별시 노원구 동일로186길 3-24",
+    "dong": "공릉1동",
+    "no": 23
+  },
+  {
+    "name": "공릉1동 제4투",
+    "bld": "공릉행복발전소 1층 경로당",
+    "addr": "서울특별시 노원구 동일로179길 22",
+    "dong": "공릉1동",
+    "no": 24
+  },
+  {
+    "name": "공릉1동 제5투",
+    "bld": "공릉종합사회복지관 1층 경로당",
+    "addr": "서울특별시 노원구 동일로 1127",
+    "dong": "공릉1동",
+    "no": 25
+  },
+  {
+    "name": "공릉1동 제6투",
+    "bld": "공릉2단지아파트 관리사무소 1층 경로당",
+    "addr": "서울특별시 노원구 동일로198가길 149",
+    "dong": "공릉1동",
+    "no": 26
+  },
+  {
+    "name": "공릉1동 제7투",
+    "bld": "공연초등학교 2층 2-3교실",
+    "addr": "서울특별시 노원구 동일로192가길 16",
+    "dong": "공릉1동",
+    "no": 27
+  },
+  {
+    "name": "공릉1동 제8투",
+    "bld": "노원문화원 1층 다목적공연장",
+    "addr": "서울특별시 노원구 동일로197길 24",
+    "dong": "공릉1동",
+    "no": 28
+  },
+  {
+    "name": "공릉1동 제9투",
+    "bld": "용원초등학교 용원꿈누리관 2층 대강당",
+    "addr": "서울특별시 노원구 섬밭로 144",
+    "dong": "공릉1동",
+    "no": 29
+  },
+  {
+    "name": "공릉2동 제1투",
+    "bld": "공릉2동주민센터 1층 주민쉼터",
+    "addr": "서울특별시 노원구 노원로1길 68",
+    "dong": "공릉2동",
+    "no": 30
+  },
+  {
+    "name": "공릉2동 제2투",
+    "bld": "우방아파트 경로당 1층",
+    "addr": "서울특별시 노원구 노원로 58",
+    "dong": "공릉2동",
+    "no": 31
+  },
+  {
+    "name": "공릉2동 제3투",
+    "bld": "경춘선힐링쉼터 1층 북카페",
+    "addr": "서울특별시 노원구 공릉로51길 20",
+    "dong": "공릉2동",
+    "no": 32
+  },
+  {
+    "name": "공릉2동 제4투",
+    "bld": "공릉구민체육센터 2층 다목적체육관",
+    "addr": "서울특별시 노원구 공릉로34길 81",
+    "dong": "공릉2동",
+    "no": 33
+  },
+  {
+    "name": "공릉2동 제5투",
+    "bld": "삼익포레스트아파트 경로당 1층",
+    "addr": "서울특별시 노원구 공릉로46길 32",
+    "dong": "공릉2동",
+    "no": 34
+  },
+  {
+    "name": "공릉2동 제6투",
+    "bld": "공릉보건지소 지하1층 보건교육실",
+    "addr": "서울특별시 노원구 공릉로 166-1",
+    "dong": "공릉2동",
+    "no": 35
+  },
+  {
+    "name": "공릉2동 제7투",
+    "bld": "공릉노인복지관 지하1층 식당",
+    "addr": "서울특별시 노원구 공릉로 129",
+    "dong": "공릉2동",
+    "no": 36
+  },
+  {
+    "name": "공릉2동 제8투",
+    "bld": "태랑중학교 1층 체육관",
+    "addr": "서울특별시 노원구 화랑로51나길 51",
+    "dong": "공릉2동",
+    "no": 37
+  },
+  {
+    "name": "공릉2동 제9투",
+    "bld": "공릉아파트 경로당 1층",
+    "addr": "서울특별시 노원구 화랑로51길 81",
+    "dong": "공릉2동",
+    "no": 38
+  },
+  {
+    "name": "하계1동 제1투",
+    "bld": "하계중학교 1층 본관 디지털미디어센터",
+    "addr": "서울특별시 노원구 노원로 261-8",
+    "dong": "하계1동",
+    "no": 39
+  },
+  {
+    "name": "하계1동 제2투",
+    "bld": "불암중학교 1층 체육관동 시청각실",
+    "addr": "서울특별시 노원구 한글비석로5길 45",
+    "dong": "하계1동",
+    "no": 40
+  },
+  {
+    "name": "하계1동 제3투",
+    "bld": "하계종합사회복지관 1층 탁구장",
+    "addr": "서울특별시 노원구 노원로16길 15",
+    "dong": "하계1동",
+    "no": 41
+  },
+  {
+    "name": "하계1동 제4투",
+    "bld": "한청경로당 1층",
+    "addr": "서울특별시 노원구 공릉로 351",
+    "dong": "하계1동",
+    "no": 42
+  },
+  {
+    "name": "하계1동 제5투",
+    "bld": "연촌초등학교 1층 본관 로비",
+    "addr": "서울특별시 노원구 공릉로58길 36",
+    "dong": "하계1동",
+    "no": 43
+  },
+  {
+    "name": "하계1동 제6투",
+    "bld": "청솔아파트 관리사무소 1층 회의실",
+    "addr": "서울특별시 노원구 공릉로59길 25",
+    "dong": "하계1동",
+    "no": 44
+  },
+  {
+    "name": "하계2동 제1투",
+    "bld": "장미아파트 관리사무소 1층 회의실",
+    "addr": "서울특별시 노원구 섬밭로 196",
+    "dong": "하계2동",
+    "no": 45
+  },
+  {
+    "name": "하계2동 제2투",
+    "bld": "중현초등학교 1층 꿈자람터",
+    "addr": "서울특별시 노원구 섬밭로 181",
+    "dong": "하계2동",
+    "no": 46
+  },
+  {
+    "name": "하계2동 제3투",
+    "bld": "현우경로당 1층 현대우성아파트 내",
+    "addr": "서울특별시 노원구 섬밭로 232",
+    "dong": "하계2동",
+    "no": 47
+  },
+  {
+    "name": "하계2동 제4투",
+    "bld": "중평초등학교 1층 체육관 어울채",
+    "addr": "서울특별시 노원구 섬밭로 241",
+    "dong": "하계2동",
+    "no": 48
+  },
+  {
+    "name": "하계2동 제5투",
+    "bld": "중평중학교 1층 가정실",
+    "addr": "서울특별시 노원구 동일로203길 87",
+    "dong": "하계2동",
+    "no": 49
+  },
+  {
+    "name": "중계본동 제1투",
+    "bld": "중계본동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 중계로 143",
+    "dong": "중계본동",
+    "no": 50
+  },
+  {
+    "name": "중계본동 제2투",
+    "bld": "불암도서관 지하1층 플랫폼B",
+    "addr": "서울특별시 노원구 중계로 106",
+    "dong": "중계본동",
+    "no": 51
+  },
+  {
+    "name": "중계본동 제3투",
+    "bld": "수암초등학교 수암관 1층 체육관",
+    "addr": "서울특별시 노원구 중계로12길 9",
+    "dong": "중계본동",
+    "no": 52
+  },
+  {
+    "name": "중계본동 제4투",
+    "bld": "불암고등학교 1층 도서관",
+    "addr": "서울특별시 노원구 중계로 155",
+    "dong": "중계본동",
+    "no": 53
+  },
+  {
+    "name": "중계본동 제5투",
+    "bld": "불암초등학교 1층 체육관",
+    "addr": "서울특별시 노원구 중계로 178",
+    "dong": "중계본동",
+    "no": 54
+  },
+  {
+    "name": "중계1동 제1투",
+    "bld": "중계1동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 한글비석로 279",
+    "dong": "중계1동",
+    "no": 55
+  },
+  {
+    "name": "중계1동 제2투",
+    "bld": "원광초등학교 1층 중앙현관",
+    "addr": "서울특별시 노원구 덕릉로76길 18",
+    "dong": "중계1동",
+    "no": 56
+  },
+  {
+    "name": "중계1동 제3투",
+    "bld": "청암중고등학교 1층 구 유치원",
+    "addr": "서울특별시 노원구 중계로 244",
+    "dong": "중계1동",
+    "no": 57
+  },
+  {
+    "name": "중계1동 제4투",
+    "bld": "을지초등학교 1층 1-7반",
+    "addr": "서울특별시 노원구 중계로 239",
+    "dong": "중계1동",
+    "no": 58
+  },
+  {
+    "name": "중계1동 제5투",
+    "bld": "서라벌고등학교 1층 송덕도서관",
+    "addr": "서울특별시 노원구 한글비석로5길 18",
+    "dong": "중계1동",
+    "no": 59
+  },
+  {
+    "name": "중계2·3동 제1투",
+    "bld": "노원구민의전당 1층 레크레이션실",
+    "addr": "서울특별시 노원구 동일로 1229",
+    "dong": "중계2·3동",
+    "no": 60
+  },
+  {
+    "name": "중계2·3동 제2투",
+    "bld": "노원구민의전당 1층 로비",
+    "addr": "서울특별시 노원구 동일로 1229",
+    "dong": "중계2·3동",
+    "no": 61
+  },
+  {
+    "name": "중계2·3동 제3투",
+    "bld": "중원초등학교 1층 현관 로비",
+    "addr": "서울특별시 노원구 섬밭로 316",
+    "dong": "중계2·3동",
+    "no": 62
+  },
+  {
+    "name": "중계2·3동 제4투",
+    "bld": "서울아이티고등학교 믿음관 1층",
+    "addr": "서울특별시 노원구 섬밭로 299",
+    "dong": "중계2·3동",
+    "no": 63
+  },
+  {
+    "name": "중계2·3동 제5투",
+    "bld": "중계2·3동주민센터 3층 소강당",
+    "addr": "서울특별시 노원구 노원로17길 56",
+    "dong": "중계2·3동",
+    "no": 64
+  },
+  {
+    "name": "중계2·3동 제6투",
+    "bld": "청계초등학교 1층 현관 로비",
+    "addr": "서울특별시 노원구 공릉로 431",
+    "dong": "중계2·3동",
+    "no": 65
+  },
+  {
+    "name": "중계2·3동 제7투",
+    "bld": "마들종합사회복지관 1층 식당",
+    "addr": "서울특별시 노원구 동일로210길 22",
+    "dong": "중계2·3동",
+    "no": 66
+  },
+  {
+    "name": "중계2·3동 제8투",
+    "bld": "중원중학교 본관 1층 가사실",
+    "addr": "서울특별시 노원구 공릉로 420",
+    "dong": "중계2·3동",
+    "no": 67
+  },
+  {
+    "name": "중계2·3동 제9투",
+    "bld": "평화종합사회복지관 1층 식당",
+    "addr": "서울특별시 노원구 노원로 331",
+    "dong": "중계2·3동",
+    "no": 68
+  },
+  {
+    "name": "중계2·3동 제10투",
+    "bld": "목화아파트 경로당 1층",
+    "addr": "서울특별시 노원구 노원로19길 31",
+    "dong": "중계2·3동",
+    "no": 69
+  },
+  {
+    "name": "중계4동 제1투",
+    "bld": "중계4동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 덕릉로82길 50",
+    "dong": "중계4동",
+    "no": 70
+  },
+  {
+    "name": "중계4동 제2투",
+    "bld": "중계종합사회복지관 1층 경로식당",
+    "addr": "서울특별시 노원구 덕릉로 662",
+    "dong": "중계4동",
+    "no": 71
+  },
+  {
+    "name": "중계4동 제3투",
+    "bld": "중계초등학교 1층 다목적실",
+    "addr": "서울특별시 노원구 한글비석로19길 39",
+    "dong": "중계4동",
+    "no": 72
+  },
+  {
+    "name": "중계4동 제4투",
+    "bld": "상계제일중학교 1층 시청각실 로비",
+    "addr": "서울특별시 노원구 덕릉로86길 29-15",
+    "dong": "중계4동",
+    "no": 73
+  },
+  {
+    "name": "상계1동 제1투",
+    "bld": "상계1동주민센터 5층 다목적실",
+    "addr": "서울특별시 노원구 동일로 1697",
+    "dong": "상계1동",
+    "no": 74
+  },
+  {
+    "name": "상계1동 제2투",
+    "bld": "수락초등학교 2층 체육관",
+    "addr": "서울특별시 노원구 동일로 1745",
+    "dong": "상계1동",
+    "no": 75
+  },
+  {
+    "name": "상계1동 제3투",
+    "bld": "은빛2단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로245가길 41",
+    "dong": "상계1동",
+    "no": 76
+  },
+  {
+    "name": "상계1동 제4투",
+    "bld": "수락중학교 1층 하랑관",
+    "addr": "서울특별시 노원구 동일로 1729",
+    "dong": "상계1동",
+    "no": 77
+  },
+  {
+    "name": "상계1동 제5투",
+    "bld": "노일중학교 1층 체육동아리실",
+    "addr": "서울특별시 노원구 동일로231길 24",
+    "dong": "상계1동",
+    "no": 78
+  },
+  {
+    "name": "상계1동 제6투",
+    "bld": "노일초등학교 1층 늘봄교실",
+    "addr": "서울특별시 노원구 동일로 1625",
+    "dong": "상계1동",
+    "no": 79
+  },
+  {
+    "name": "상계1동 제7투",
+    "bld": "극동늘푸른아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로246길 39",
+    "dong": "상계1동",
+    "no": 80
+  },
+  {
+    "name": "상계1동 제8투",
+    "bld": "노원초등학교 본관 2층 어울림터",
+    "addr": "서울특별시 노원구 동일로230나길 32",
+    "dong": "상계1동",
+    "no": 81
+  },
+  {
+    "name": "상계2동 제1투",
+    "bld": "상계2동공공복합청사 4층 대강당",
+    "addr": "서울특별시 노원구 상계로 118",
+    "dong": "상계2동",
+    "no": 82
+  },
+  {
+    "name": "상계2동 제2투",
+    "bld": "상계초등학교 1층 중앙복도",
+    "addr": "서울특별시 노원구 상계로9길 39",
+    "dong": "상계2동",
+    "no": 83
+  },
+  {
+    "name": "상계2동 제3투",
+    "bld": "구립청솔경로당 1층",
+    "addr": "서울특별시 노원구 노원로30길 73",
+    "dong": "상계2동",
+    "no": 84
+  },
+  {
+    "name": "상계2동 제4투",
+    "bld": "상계중학교 1층 동아리실",
+    "addr": "서울특별시 노원구 노원로 398",
+    "dong": "상계2동",
+    "no": 85
+  },
+  {
+    "name": "상계3·4동 제1투",
+    "bld": "신상계초등학교 2층 체육관",
+    "addr": "서울특별시 노원구 상계로 267",
+    "dong": "상계3·4동",
+    "no": 86
+  },
+  {
+    "name": "상계3·4동 제2투",
+    "bld": "노원롯데캐슬시그니처아파트 105동 지하1층 커뮤니티시설 내 도서관",
+    "addr": "서울특별시 노원구 덕릉로 753",
+    "dong": "상계3·4동",
+    "no": 87
+  },
+  {
+    "name": "상계3·4동 제3투",
+    "bld": "상계불암대림아파트경로당 1층",
+    "addr": "서울특별시 노원구 덕릉로94길 21",
+    "dong": "상계3·4동",
+    "no": 88
+  },
+  {
+    "name": "상계3·4동 제4투",
+    "bld": "동아불암아파트경로당 1층",
+    "addr": "서울특별시 노원구 덕릉로 780",
+    "dong": "상계3·4동",
+    "no": 89
+  },
+  {
+    "name": "상계3·4동 제5투",
+    "bld": "상계종합사회복지관 2층 대강당",
+    "addr": "서울특별시 노원구 덕릉로115나길 25",
+    "dong": "상계3·4동",
+    "no": 90
+  },
+  {
+    "name": "상계3·4동 제6투",
+    "bld": "청암1단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 덕릉로112길 24",
+    "dong": "상계3·4동",
+    "no": 91
+  },
+  {
+    "name": "상계3·4동 제7투",
+    "bld": "상계3·4동주민센터 2층 다용도실",
+    "addr": "서울특별시 노원구 덕릉로 859",
+    "dong": "상계3·4동",
+    "no": 92
+  },
+  {
+    "name": "상계5동 제1투",
+    "bld": "상계5동주민센터 3층 강당",
+    "addr": "서울특별시 노원구 한글비석로 434",
+    "dong": "상계5동",
+    "no": 93
+  },
+  {
+    "name": "상계5동 제2투",
+    "bld": "벽산아파트 관리사무소 1층 회의실",
+    "addr": "서울특별시 노원구 한글비석로 396",
+    "dong": "상계5동",
+    "no": 94
+  },
+  {
+    "name": "상계5동 제3투",
+    "bld": "계상초등학교 1층 휴게실",
+    "addr": "서울특별시 노원구 한글비석로41가길 24",
+    "dong": "상계5동",
+    "no": 95
+  },
+  {
+    "name": "상계5동 제4투",
+    "bld": "한신2차아파트 관리사무소 1층 경로당",
+    "addr": "서울특별시 노원구 한글비석로48길 6",
+    "dong": "상계5동",
+    "no": 96
+  },
+  {
+    "name": "상계5동 제5투",
+    "bld": "한신1차아파트 관리사무소 1층 경로당",
+    "addr": "서울특별시 노원구 한글비석로46가길 16",
+    "dong": "상계5동",
+    "no": 97
+  },
+  {
+    "name": "상계5동 제6투",
+    "bld": "대림아파트 관리사무소 2층 경로당",
+    "addr": "서울특별시 노원구 상계로 193-14",
+    "dong": "상계5동",
+    "no": 98
+  },
+  {
+    "name": "상계6·7동 제1투",
+    "bld": "상계고등학교 북관 1층 화학실험실",
+    "addr": "서울특별시 노원구 노해로 432",
+    "dong": "상계6·7동",
+    "no": 99
+  },
+  {
+    "name": "상계6·7동 제2투",
+    "bld": "노원중학교 본관 1층 협력종합예술실",
+    "addr": "서울특별시 노원구 동일로213길 26",
+    "dong": "상계6·7동",
+    "no": 100
+  },
+  {
+    "name": "상계6·7동 제3투",
+    "bld": "당현초등학교 정보체육관 1층 체육관 영어전용교실",
+    "addr": "서울특별시 노원구 동일로213길 52",
+    "dong": "상계6·7동",
+    "no": 101
+  },
+  {
+    "name": "상계6·7동 제4투",
+    "bld": "상천초등학교 체육관 1층 현관로비",
+    "addr": "서울특별시 노원구 덕릉로 443",
+    "dong": "상계6·7동",
+    "no": 102
+  },
+  {
+    "name": "상계6·7동 제5투",
+    "bld": "상계주공6단지 경로당 1층",
+    "addr": "서울특별시 노원구 노해로 508",
+    "dong": "상계6·7동",
+    "no": 103
+  },
+  {
+    "name": "상계6·7동 제6투",
+    "bld": "신상중학교 본관 1층 학부모회의실",
+    "addr": "서울특별시 노원구 동일로216길 42",
+    "dong": "상계6·7동",
+    "no": 104
+  },
+  {
+    "name": "상계6·7동 제7투",
+    "bld": "상수초등학교 본관 1층 학생자치실",
+    "addr": "서울특별시 노원구 동일로216길 66",
+    "dong": "상계6·7동",
+    "no": 105
+  },
+  {
+    "name": "상계8동 제1투",
+    "bld": "상계8동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 동일로227길 97",
+    "dong": "상계8동",
+    "no": 106
+  },
+  {
+    "name": "상계8동 제2투",
+    "bld": "상계주공10단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 노원로 564",
+    "dong": "상계8동",
+    "no": 107
+  },
+  {
+    "name": "상계8동 제3투",
+    "bld": "상계주공11단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로227길 25",
+    "dong": "상계8동",
+    "no": 108
+  },
+  {
+    "name": "상계8동 제4투",
+    "bld": "상경중학교 1층 교사연구연수실",
+    "addr": "서울특별시 노원구 동일로227길 61",
+    "dong": "상계8동",
+    "no": 109
+  },
+  {
+    "name": "상계8동 제5투",
+    "bld": "상계주공16단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로227길 86",
+    "dong": "상계8동",
+    "no": 110
+  },
+  {
+    "name": "상계9동 제1투",
+    "bld": "상계9동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 한글비석로 487",
+    "dong": "상계9동",
+    "no": 111
+  },
+  {
+    "name": "상계9동 제2투",
+    "bld": "보람아파트 경로당 1층",
+    "addr": "서울특별시 노원구 한글비석로 479",
+    "dong": "상계9동",
+    "no": 112
+  },
+  {
+    "name": "상계9동 제3투",
+    "bld": "상계주공12단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 한글비석로 530",
+    "dong": "상계9동",
+    "no": 113
+  },
+  {
+    "name": "상계9동 제4투",
+    "bld": "상계주공14단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로228길 23",
+    "dong": "상계9동",
+    "no": 114
+  },
+  {
+    "name": "상계10동 제1투",
+    "bld": "상계10동주민센터 1층 민원실",
+    "addr": "서울특별시 노원구 노원로 530",
+    "dong": "상계10동",
+    "no": 115
+  },
+  {
+    "name": "상계10동 제2투",
+    "bld": "상계주공7단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 동일로 1456",
+    "dong": "상계10동",
+    "no": 116
+  },
+  {
+    "name": "상계10동 제3투",
+    "bld": "상곡초등학교 1층 중앙현관",
+    "addr": "서울특별시 노원구 노원로38길 34",
+    "dong": "상계10동",
+    "no": 117
+  },
+  {
+    "name": "상계10동 제4투",
+    "bld": "상계주공9단지아파트 경로당 1층",
+    "addr": "서울특별시 노원구 노원로 532",
+    "dong": "상계10동",
+    "no": 118
+  }
 ];
 
 function geocodeNaver(addr){
@@ -462,7 +1443,7 @@ async function kakaoSearch(query){
     const r=await fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}&size=5`,{headers:{'Authorization':'KakaoAK 609acf72a7b76934bf9755fbcd2aac74'}});
     const d=await r.json();
     if(d.documents&&d.documents.length){
-      const hit=d.documents.find(x=>(x.address_name||'').includes('부산'))||d.documents[0];
+      const hit=d.documents.find(x=>(x.address_name||'').includes('서울')|| (x.address_name||'').includes('노원구'))||d.documents[0];
       return{lat:parseFloat(hit.y),lng:parseFloat(hit.x)};
     }
   }catch(e){}return null;
@@ -470,16 +1451,18 @@ async function kakaoSearch(query){
 function makeVoteMarker(s,type){
   const isPre=type==='pre';
   const color=isPre?'#2563eb':'#ff4757';
-  const icon=isPre?'🗳':'📍';
+  const icon=isPre?'🗳':'🏫';
   const m=new naver.maps.Marker({
     position:new naver.maps.LatLng(s.lat,s.lng),map,
     icon:{content:`<div style="background:${color};color:#fff;border:1px solid #fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:8px;box-shadow:0 1px 5px rgba(0,0,0,.5);transform:translate(-7px,-7px);cursor:pointer;">${icon}</div>`,anchor:new naver.maps.Point(0,0)},
     zIndex:isPre?31:30
   });
+  m._station=s;
+  m._type=type;
   naver.maps.Event.addListener(m,'click',()=>{
     const popup=document.getElementById('votePopup');
     popup.className=`vote-popup show ${type}`;
-    document.getElementById('vpType').textContent=isPre?'🗳 사전투표소 · 연제구':'📍 선거일투표소 · 연제구';
+    document.getElementById('vpType').textContent=isPre?`🗳 사전투표소 · ${getStationDong(s)}`:`🏫 본투표소 · ${getStationDong(s)}`;
     document.getElementById('vpName').textContent=s.name;
     document.getElementById('vpBld').textContent=s.bld;
     document.getElementById('vpAddr').textContent=s.addr;
@@ -500,41 +1483,62 @@ function makeVoteMarker(s,type){
 async function initMarkers(type){
   const data=type==='pre'?PRE:DAY;
   for(const s of data){
-    if(s.lat&&s.lng){markers[type].push(makeVoteMarker(s,type));continue;}
+    if(s.lat&&s.lng){
+      const marker=makeVoteMarker(s,type);
+      markers[type].push(marker);
+      marker.setMap(isMarkerVisible(marker)?map:null);
+      continue;
+    }
     const coord=await geocodeNaver(s.addr);
     if(!coord){console.warn('geocode 실패:',s.addr);continue;}
-    s.lat=coord.lat;s.lng=coord.lng;markers[type].push(makeVoteMarker(s,type));
+    s.lat=coord.lat;s.lng=coord.lng;
+    const marker=makeVoteMarker(s,type);
+    markers[type].push(marker);
+    marker.setMap(isMarkerVisible(marker)?map:null);
   }
+  refreshMarkerVisibility();
 }
 function toggleMarkers(type){
   showing[type]=!showing[type];
-  markers[type].forEach(m=>m.setMap(showing[type]?map:null));
-  document.getElementById(type==='pre'?'preBtn':'dayBtn').classList.toggle(type==='pre'?'on-blue':'on-red',showing[type]);
+  refreshMarkerVisibility();
+  document.getElementById(type==='pre'?'preBtn':'dayBtn').classList.toggle(type==='pre'?'on-blue':'on-orange',showing[type]);
 }
 initMarkers('pre');initMarkers('day');
 
 const DONG_COLORS=['#a855f7','#06b6d4','#f59e0b','#10b981','#f43f5e','#3b82f6','#84cc16','#f97316','#ec4899','#14b8a6','#8b5cf6','#ef4444'];
 async function drawDong(){
   try{
-    const res=await fetch('https://raw.githubusercontent.com/raqoon886/Local_HangJeongDong/master/hangjeongdong_%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C.geojson');
+    const res=await fetch('https://raw.githubusercontent.com/raqoon886/Local_HangJeongDong/master/hangjeongdong_%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C.geojson');
     const gj=await res.json();
     gj.features.filter(f=>{
       const p=f.properties;
-      return (p.SGG_NM&&p.SGG_NM.includes('연제구'))||(p.sigungu&&p.sigungu.includes('연제구'))||
-             (p.adm_nm&&p.adm_nm.includes('연제구'))||(p.SIG_KOR_NM&&p.SIG_KOR_NM.includes('연제구'));
+      return (p.SGG_NM&&p.SGG_NM.includes('노원구'))||(p.sigungu&&p.sigungu.includes('노원구'))||
+             (p.adm_nm&&p.adm_nm.includes('노원구'))||(p.SIG_KOR_NM&&p.SIG_KOR_NM.includes('노원구'));
     }).forEach((f,i)=>{
+      const dong=getFeatureDong(f.properties||{});
       const color=DONG_COLORS[i%DONG_COLORS.length];
       const arr=f.geometry.type==='MultiPolygon'?f.geometry.coordinates.map(p=>p[0]):[f.geometry.coordinates[0]];
       arr.forEach(ca=>{
-        dongPolygons.push(new naver.maps.Polygon({
-          map,paths:[ca.map(c=>new naver.maps.LatLng(c[1],c[0]))],
+        const path=ca.map(c=>new naver.maps.LatLng(c[1],c[0]));
+        path.forEach(ll=>{
+          if(!dong)return;
+          if(!dongBounds[dong])dongBounds[dong]={minLat:ll.lat(),maxLat:ll.lat(),minLng:ll.lng(),maxLng:ll.lng()};
+          const b=dongBounds[dong];
+          b.minLat=Math.min(b.minLat,ll.lat());b.maxLat=Math.max(b.maxLat,ll.lat());
+          b.minLng=Math.min(b.minLng,ll.lng());b.maxLng=Math.max(b.maxLng,ll.lng());
+        });
+        const poly=new naver.maps.Polygon({
+          map:null,paths:[path],
           strokeColor:color,strokeWeight:2,strokeOpacity:.9,fillColor:color,fillOpacity:.12
-        }));
+        });
+        poly._dong=dong;
+        dongPolygons.push(poly);
       });
     });
+    refreshDongVisibility();
   }catch(e){console.error('행정동 로드 실패:',e);}
 }
-function toggleDong(){showDong=!showDong;dongPolygons.forEach(p=>p.setMap(showDong?map:null));document.getElementById('dongBtn').classList.toggle('on-purple',showDong);}
+function toggleDong(){showDong=!showDong;refreshDongVisibility();document.getElementById('dongBtn').classList.toggle('on-purple',showDong);}
 drawDong();
 
 function updateCompass(h){lastHeading=h;document.getElementById('needle').setAttribute('transform',`rotate(${h},20,20)`);}
@@ -651,15 +1655,15 @@ function moveToResult(lat,lng,zoom){const ll=new naver.maps.LatLng(lat,lng);map.
 async function doSearch(){
   const raw=document.getElementById('si').value.trim();if(!raw)return;
   const q=raw.replace(/\s+/g,' ').trim();
-  const kk=await kakaoSearch(q+' 부산');if(kk){moveToResult(kk.lat,kk.lng,17);return;}
-  for(const query of [...new Set([q,q+' 부산','부산 '+q,'부산 연제구 '+q,q.replace(/(\d)([가-힣])/g,'$1 $2'),q.replace(/([가-힣])(\d)/g,'$1 $2')])]){
+  const kk=await kakaoSearch(q+' 서울 노원구');if(kk){moveToResult(kk.lat,kk.lng,17);return;}
+  for(const query of [...new Set([q,q+' 서울 노원구','서울 노원구 '+q,'서울 노원구 '+q,q.replace(/(\d)([가-힣])/g,'$1 $2'),q.replace(/([가-힣])(\d)/g,'$1 $2')])]){
     const r=await geocodeNaver(query);if(r){moveToResult(r.lat,r.lng,17);return;}
   }
-  for(const query of [q+' 부산','부산 연제구 '+q,q]){
+  for(const query of [q+' 서울 노원구','서울 노원구 '+q,q]){
     try{
       const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&accept-language=ko&countrycodes=kr`,{headers:{'Accept-Language':'ko'}});
       const d=await r.json();
-      if(d&&d.length){const hit=d.find(x=>(x.display_name||'').includes('부산'))||d[0];moveToResult(parseFloat(hit.lat),parseFloat(hit.lon),16);return;}
+      if(d&&d.length){const hit=d.find(x=>(x.display_name||'').includes('서울')|| (x.address_name||'').includes('노원구'))||d[0];moveToResult(parseFloat(hit.lat),parseFloat(hit.lon),16);return;}
     }catch(e){}
     await new Promise(r=>setTimeout(r,80));
   }
