@@ -166,7 +166,7 @@ input[type=range]:disabled{opacity:.4}
     <div class="help-section">
       <div class="help-section-title">🗳 투표소 찾기</div>
       <div class="help-row"><div class="help-icon">🗳</div><div class="help-text"><b>파란 버튼</b> → 사전투표소 19곳 표시/숨기기<br><span class="sub">5.29(금)~5.30(토) 06:00~18:00</span></div></div>
-      <div class="help-row"><div class="help-icon">🏫</div><div class="help-text"><b>빨간 버튼</b> → 본투표소 118곳 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
+      <div class="help-row"><div class="help-icon">📍</div><div class="help-text"><b>빨간 버튼</b> → 본투표소 118곳 표시/숨기기<br><span class="sub">6.3(수) 06:00~18:00</span></div></div>
       <div class="help-row"><div class="help-icon">👆</div><div class="help-text"><b>투표소 핀 터치</b> → 투표소명·장소·주소·시간·내위치 거리 확인</div></div>
     </div>
     <hr class="help-divider">
@@ -260,7 +260,7 @@ input[type=range]:disabled{opacity:.4}
     </div>
     <button class="ib on-purple" id="dongBtn" onclick="toggleDong()">🏘</button>
     <button class="ib" id="preBtn" onclick="toggleMarkers('pre')">🗳</button>
-    <button class="ib on-orange" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">🏫</button>
+    <button class="ib on-orange" id="dayBtn" onclick="toggleMarkers('day')" title="본투표소 118곳">📍</button>
     <button class="ib" id="lockBtn" onclick="toggleLock()">🔓</button>
     <button class="ib" id="trackBtn" onclick="toggleTracking()">◎</button>
     <button class="ib" onclick="locateOnce()">⊕</button>
@@ -1445,7 +1445,7 @@ async function kakaoSearch(query){
 function makeVoteMarker(s,type){
   const isPre=type==='pre';
   const color=isPre?'#2563eb':'#ff4757';
-  const icon=isPre?'🗳':'🏫';
+  const icon=isPre?'🗳':'📍';
   const m=new naver.maps.Marker({
     position:new naver.maps.LatLng(s.lat,s.lng),map,
     icon:{content:`<div style="background:${color};color:#fff;border:1px solid #fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:8px;box-shadow:0 1px 5px rgba(0,0,0,.5);transform:translate(-7px,-7px);cursor:pointer;">${icon}</div>`,anchor:new naver.maps.Point(0,0)},
@@ -1456,7 +1456,7 @@ function makeVoteMarker(s,type){
   naver.maps.Event.addListener(m,'click',()=>{
     const popup=document.getElementById('votePopup');
     popup.className=`vote-popup show ${type}`;
-    document.getElementById('vpType').textContent=isPre?`🗳 사전투표소 · ${getStationDong(s)}`:`🏫 본투표소 · ${getStationDong(s)}`;
+    document.getElementById('vpType').textContent=isPre?`🗳 사전투표소 · ${getStationDong(s)}`:`📍 본투표소 · ${getStationDong(s)}`;
     document.getElementById('vpName').textContent=s.name;
     document.getElementById('vpBld').textContent=s.bld;
     document.getElementById('vpAddr').textContent=s.addr;
